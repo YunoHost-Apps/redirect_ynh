@@ -1,0 +1,74 @@
+{
+    "name": "Redirect",
+    "id": "redirect",
+    "packaging_format": 1,
+    "requirements": {
+        "yunohost": ">= 2.4"
+    },
+    "description": {
+        "en": "Create a redirection or a proxy to another path.",
+        "fr": "Créer une redirection ou un proxy vers un autre emplacement"
+    },
+    "maintainer": {
+        "name": "opi",
+        "email": "opi@zeropi.net"
+    },
+    "multi_instance": "true",
+    "services": [
+        "nginx"
+    ],
+    "arguments": {
+        "install" : [
+            {
+                "name": "domain",
+                "type": "domain",
+                "ask": {
+                    "en": "Choose a domain for your redirect",
+                    "fr": "Choisissez un domaine pour votre redirection"
+                },
+                "example": "domain.org"
+            },
+            {
+                "name": "path",
+                "type": "path",
+                "ask": {
+                    "en": "Choose a path for your redirect",
+                    "fr": "Choisissez un chemin pour votre redirection"
+                },
+                "example": "/redirect",
+                "default": "/redirect"
+            },
+            {
+                "name": "redirect_path",
+                "ask": {
+                    "en": "Redirect destination path",
+                    "fr": "Emplacement de destination"
+                },
+                "example": "http://127.0.0.1:8080/app/",
+                "default": "http://127.0.0.1"
+            },
+            {
+                "name": "is_public",
+                "type": "boolean",
+                "ask": {
+                    "en": "Is it a public redirect ?",
+                    "fr": "Est-ce une redirection publique ?"
+                },
+                "default": false
+            },
+            {
+                "name": "redirect_type",
+                "ask": {
+                    "en": "Redirect type",
+                    "fr": "Type de redirection"
+                },
+                "choices": {
+                  "visible_302" : "Visible (302 redirect)",
+                  "visible_301" : "Visible (301 redirect)",
+                  "proxy": "Proxy, invisible (Nginx proxy_pass)"
+                },
+                "default": "visible_302"
+            }
+        ]
+    }
+}
