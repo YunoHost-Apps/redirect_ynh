@@ -65,7 +65,7 @@
                 "choices": [
                   "visible_302",
                   "visible_301",
-                  "proxy",
+                  "proxy"
                 ],
                 "default": "visible_302"
             }
