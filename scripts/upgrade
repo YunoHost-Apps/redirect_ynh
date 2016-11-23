@@ -25,6 +25,12 @@ is_public=$(ynh_app_setting_get "$app" is_public)
 redirect_type=$(ynh_app_setting_get "$app" redirect_type)
 redirect_path=$(ynh_app_setting_get "$app" redirect_path)
 
+# Default value for redirect_type if upgrading from https://github.com/scith/redirect_ynh
+if [ -z "$redirect_type" ];
+then
+    redirect_type="proxy"
+fi
+
 # Remove trailing slash to path
 path=${path%/}
 #force location to be / or /foo
