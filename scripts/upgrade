@@ -29,6 +29,7 @@ redirect_path=$(ynh_app_setting_get "$app" redirect_path)
 if [ -z "$redirect_type" ];
 then
     redirect_type="proxy"
+    ynh_app_setting_set $app 'redirect_type' $redirect_type
 fi
 
 # Remove trailing slash to path
