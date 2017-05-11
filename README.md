@@ -6,9 +6,9 @@ It could be an invisible redirect, an external link, another app on your local n
 
 This app only adds a Nginx configuration file with `redirect` or `proxy_pass` rule, and a YunoHost tile. Nothing more.
 
-## Redirect type
+## Redirect type
 
-### Visible redirect
+### Visible redirect
 
 Visitor's address bar will change. Helpfull to add a user link to another 
 website
@@ -16,7 +16,7 @@ website
     you-domain.com -> another-domain.net
     you-domain.com/foo -> another-domain.net/bar
 
-### Invisible (proxy) redirect
+### Invisible (proxy) redirect
 
 Visitor's address bar will remain the same. Mostly use to serve local webserver 
 for a personnal application.
@@ -29,13 +29,13 @@ for a personnal application.
 
 *Concrete example:* the Odoo Docker container runs on http://127.0.0.1:8069/. You will not be able to redirect it to http://domain.tld/odoo/ ! You have to redirect it to the root, so for example http://odoo.domain.tld/
 
-## Public or private redirect
+## Public or private redirect
 
 In case of a private redirect, the app will be available to logged in users only. This could be useful if you want to protect behind the SSO an app from your local network or from the server (e.g., a Docker container or an app that does not have user management or password protection).
 
 **IMPORTANT:** Make sure that the app you want to protect CANNOT be accessed by its port or another direct link. Otherwise, your app will only be protected in YunoHost but would still be available through its direct link. In the case of a Docker container, the port of the container will have to be local (e.g., -p 127.0.0.1:9000:9000).
 
-## Case examples
+## Case examples
 
 - **Creating a tile for a Docker container** with a local port (e.g., -p 127.0.0.1:PORT:PORT): proxy redirect to http://127.0.0.1:PORT-OF-THE-CONTAINER/
 
