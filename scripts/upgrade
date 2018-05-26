@@ -38,7 +38,7 @@ path=${path%/}
 location=${path:-/}
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a $app \
+yunohost app checkurl $domain$path -a $app \
     || (echo "Path not available: $domain$path" && exit 1)
 
 # Validate redirect path
@@ -51,23 +51,23 @@ sed -i "s@YNH_LOCATION@$location@g" ../conf/nginx-*.conf
 if [ "$redirect_type" = "visible_302" ];
 then
     sed -i "s@YNH_REDIRECT_PATH@$redirect_path@g" ../conf/nginx-visible-302.conf
-    sudo cp ../conf/nginx-visible-302.conf /etc/nginx/conf.d/$domain.d/$app.conf
+    cp ../conf/nginx-visible-302.conf /etc/nginx/conf.d/$domain.d/$app.conf
 elif [ "$redirect_type" = "visible_301" ];
 then
     sed -i "s@YNH_REDIRECT_PATH@$redirect_path@g" ../conf/nginx-visible-301.conf
-    sudo cp ../conf/nginx-visible-301.conf /etc/nginx/conf.d/$domain.d/$app.conf
+    cp ../conf/nginx-visible-301.conf /etc/nginx/conf.d/$domain.d/$app.conf
 elif [ "$redirect_type" = "proxy" ];
 then
     sed -i "s@YNH_REDIRECT_PATH@$redirect_path@g" ../conf/nginx-proxy.conf
-    sudo cp ../conf/nginx-proxy.conf /etc/nginx/conf.d/$domain.d/$app.conf
+    cp ../conf/nginx-proxy.conf /etc/nginx/conf.d/$domain.d/$app.conf
 fi
 
 # Make app public if necessary
 if [[ "$is_public" -ne 0 ]];
 then
-    sudo yunohost app setting $app unprotected_uris -v "/"
+    yunohost app setting $app unprotected_uris -v "/"
 fi
 
 # Reload Nginx and regenerate SSOwat conf
-sudo service nginx reload
-sudo yunohost app ssowatconf
+service nginx reload
+yunohost app ssowatconf

@@ -29,7 +29,7 @@ redirect_path=$(ynh_app_setting_get "$app" redirect_path)
 path=${path%/}
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a $app \
+yunohost app checkurl $domain$path -a $app \
   || die "The path ${domain}${path} is not available for app installation."
 
 # Validate redirect path
@@ -44,14 +44,14 @@ NGINX_CONF="/etc/nginx/conf.d/${domain}.d/${app}.conf"
  You should safely delete it before restoring this app."
 
 # Restore configuration files
-sudo cp -a ./conf/nginx.conf "$NGINX_CONF"
+cp -a ./conf/nginx.conf "$NGINX_CONF"
 
 # Make app public if necessary
 if [[ "$is_public" -ne 0 ]];
 then
-    sudo yunohost app setting $app unprotected_uris -v "/"
+    yunohost app setting $app unprotected_uris -v "/"
 fi
 
 # Reload Nginx and regenerate SSOwat conf
-sudo service nginx reload
-sudo yunohost app ssowatconf
+service nginx reload
+yunohost app ssowatconf

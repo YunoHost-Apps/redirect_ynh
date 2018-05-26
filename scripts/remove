@@ -16,11 +16,11 @@ set -e
 app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
-domain=$(sudo yunohost app setting $app domain)
+domain=$(yunohost app setting $app domain)
 
 # Remove configuration files
-sudo rm -f /etc/nginx/conf.d/$domain.d/$app.conf
+rm -f /etc/nginx/conf.d/$domain.d/$app.conf
 
 # Restart services
-sudo service nginx reload
-sudo yunohost app ssowatconf
+service nginx reload
+yunohost app ssowatconf

@@ -19,8 +19,8 @@ set -e
 app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
-domain=$(sudo yunohost app setting $app domain)
+domain=$(yunohost app setting $app domain)
 
 # Copy the conf files
-sudo mkdir -p ./conf
-sudo cp -a "/etc/nginx/conf.d/${domain}.d/${app}.conf" ./conf/nginx.conf
+mkdir -p ./conf
+cp -a "/etc/nginx/conf.d/${domain}.d/${app}.conf" ./conf/nginx.conf
