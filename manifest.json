@@ -3,17 +3,20 @@
     "id": "redirect",
     "packaging_format": 1,
     "requirements": {
-        "yunohost": ">= 2.4"
+        "yunohost": ">= 2.7.12"
     },
     "description": {
         "en": "Create a redirection or a proxy to another path.",
         "fr": "Créer une redirection ou un proxy vers un autre emplacement"
     },
+    "version": "1.0.0~ynh2",
+    "url": "https://github.com/YunoHost-Apps/redirect_ynh",
+    "license": "AGPL-3.0-or-later",
     "maintainer": {
         "name": "opi",
         "email": "opi@zeropi.net"
     },
-    "multi_instance": "true",
+    "multi_instance": true,
     "services": [
         "nginx"
     ],
@@ -51,7 +54,7 @@
                 "name": "is_public",
                 "type": "boolean",
                 "ask": {
-                    "en": "Is it a public redirect ?",
+                    "en": "Is it a public redirect?",
                     "fr": "Est-ce une redirection publique ?"
                 },
                 "default": false
