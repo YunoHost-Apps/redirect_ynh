@@ -1,10 +1,24 @@
 #!/bin/bash
 
-# causes the shell to exit if any subcommand or pipeline returns a non-zero status
-set -ue
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
 
-# Source app helpers
-. /usr/share/yunohost/helpers
+# source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# RETRIEVE ARGUMENTS FROM THE MANIFEST
+#=================================================
 
 # This is a multi-instance app, meaning it can be installed several times independently
 # The id of the app as stated in the manifest is available as $YNH_APP_ID
@@ -32,7 +46,7 @@ location=${path:-/}
 
 # Check domain/path availability
 yunohost app checkurl $domain$path -a $app \
-    || (echo "Path not available: $domain$path" && exit 1)
+    || ynh_die "Path not available: $domain$path"
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
@@ -60,11 +74,21 @@ then
     cp ../conf/nginx-proxy.conf /etc/nginx/conf.d/$domain.d/$app.conf
 fi
 
-# Make app public if necessary
-if [[ "$is_public" -ne 0 ]];
-then
-    yunohost app setting $app unprotected_uris -v "/"
+#=================================================
+# SETUP SSOWAT
+#=================================================
+
+if [[ "$is_public" -eq 0 ]]
+then	# Remove the public access
+	ynh_app_setting_delete "$app" skipped_uris
 fi
+# Make app public if necessary
+if [[ "$is_public" -eq 1 ]]
+then
+	# unprotected_uris allows SSO credentials to be passed anyway.
+	ynh_app_setting_set "$app" unprotected_uris "/"
+fi
+
 
 # Reload Nginx and regenerate SSOwat conf
 service nginx reload

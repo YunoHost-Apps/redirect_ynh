@@ -1,7 +1,18 @@
+
 #!/bin/bash
 
-# causes the shell to exit if any subcommand or pipeline returns a non-zero status
-set -e
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+# source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# LOAD SETTINGS
+#=================================================
 
 # This is a multi-instance app, meaning it can be installed several times independently
 # The id of the app as stated in the manifest is available as $YNH_APP_ID
@@ -25,12 +36,38 @@ is_public=$(ynh_app_setting_get "$app" is_public)
 redirect_type=$(ynh_app_setting_get "$app" redirect_type)
 redirect_path=$(ynh_app_setting_get "$app" redirect_path)
 
+#=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
+
+# Fix is_public as a boolean value
+if [ "$is_public" = "Yes" ]; then
+	ynh_app_setting_set $app is_public 1
+	is_public=1
+elif [ "$is_public" = "No" ]; then
+	ynh_app_setting_set $app is_public 0
+	is_public=0
+fi
+
 # Default value for redirect_type if upgrading from https://github.com/scith/redirect_ynh
 if [ -z "$redirect_type" ];
 then
     redirect_type="proxy"
     ynh_app_setting_set $app 'redirect_type' $redirect_type
 fi
+
+#=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
+
+# Backup the current version of the app
+ynh_backup_before_upgrade
+ynh_clean_setup () {
+	# restore it if the upgrade fails
+	ynh_restore_upgradebackup
+}
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
 
 # Remove trailing slash to path
 path=${path%/}
@@ -39,7 +76,7 @@ location=${path:-/}
 
 # Check domain/path availability
 yunohost app checkurl $domain$path -a $app \
-    || (echo "Path not available: $domain$path" && exit 1)
+    || ynh_die "Path not available: $domain$path"
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
@@ -62,10 +99,19 @@ then
     cp ../conf/nginx-proxy.conf /etc/nginx/conf.d/$domain.d/$app.conf
 fi
 
+#=================================================
+# SETUP SSOWAT
+#=================================================
+
+if [[ "$is_public" -eq 0 ]]
+then	# Remove the public access
+	ynh_app_setting_delete "$app" skipped_uris
+fi
 # Make app public if necessary
-if [[ "$is_public" -ne 0 ]];
+if [[ "$is_public" -eq 1 ]]
 then
-    yunohost app setting $app unprotected_uris -v "/"
+	# unprotected_uris allows SSO credentials to be passed anyway.
+	ynh_app_setting_set "$app" unprotected_uris -v "/"
 fi
 
 # Reload Nginx and regenerate SSOwat conf
