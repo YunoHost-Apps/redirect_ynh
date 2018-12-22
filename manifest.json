@@ -63,8 +63,8 @@
                     "fr": "Type de redirection"
                 },
                 "choices": {
-                  "visible_302" : "Visible (302 redirect)",
-                  "visible_301" : "Visible (301 redirect)",
+                  "visible_302" : "Visible (302, temporary redirect)",
+                  "visible_301" : "Visible (301, permanent redirect)",
                   "proxy": "Proxy, invisible (Nginx proxy_pass)"
                 },
                 "default": "visible_302"
