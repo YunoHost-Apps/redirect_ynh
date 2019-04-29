@@ -10,8 +10,8 @@
         "fr": "Créer une redirection ou un proxy vers un autre emplacement"
     },
     "version": "1.0.0~ynh2",
-    "url": "https://github.com/YunoHost-Apps/redirect_ynh",
     "license": "AGPL-3.0-or-later",
+    "url": "https://github.com/YunoHost-Apps/redirect_ynh",
     "maintainer": {
         "name": "opi",
         "email": "opi@zeropi.net"
@@ -43,6 +43,7 @@
             },
             {
                 "name": "redirect_path",
+                "type": "string",
                 "ask": {
                     "en": "Redirect destination path",
                     "fr": "Emplacement de destination"
@@ -56,6 +57,10 @@
                 "ask": {
                     "en": "Is it a public redirect?",
                     "fr": "Est-ce une redirection publique ?"
+                },
+                "help": {
+                    "en": "A private redirection will only be effective for logged-in users.",
+                    "fr": "Une redirection privée ne fonctionnera que pour les utilisateurs identifiés."
                 },
                 "default": false
             },

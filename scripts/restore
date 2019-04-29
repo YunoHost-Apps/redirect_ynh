@@ -48,19 +48,15 @@ redirect_path=$(ynh_app_setting_get "$app" redirect_path)
 path=${path%/}
 
 # Check domain/path availability
-yunohost app checkurl $domain$path -a $app \
-  || die "The path ${domain}${path} is not available for app installation."
+ynh_webpath_register $app $domain $path
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
-[[ ! $redirect_path =~ $url_regex ]] && ynh_die \
-"Invalid destination: $redirect_path" 1
+[[ ! $redirect_path =~ $url_regex ]] && ynh_die "Invalid destination: $redirect_path" 1
 
 # Check configuration files
 NGINX_CONF="/etc/nginx/conf.d/${domain}.d/${app}.conf"
-[[ -f $NGINX_CONF ]] && die \
-"The NGINX configuration already exists at '${NGINX_CONF}'.
- You should safely delete it before restoring this app."
+[[ -f $NGINX_CONF ]] && ynh_die "The NGINX configuration already exists at '${NGINX_CONF}'. You should safely delete it before restoring this app."
 
 # Restore configuration files
 cp -a ./conf/nginx.conf "$NGINX_CONF"
@@ -82,4 +78,3 @@ fi
 
 # Reload Nginx and regenerate SSOwat conf
 service nginx reload
-yunohost app ssowatconf

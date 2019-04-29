@@ -26,11 +26,10 @@ source /usr/share/yunohost/helpers
 app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
-domain=$(yunohost app setting $app domain)
+domain=$(ynh_app_setting_get $app domain)
 
 # Remove configuration files
-rm -f /etc/nginx/conf.d/$domain.d/$app.conf
+ynh_secure_remove /etc/nginx/conf.d/$domain.d/$app.conf
 
 # Restart services
 service nginx reload
-yunohost app ssowatconf
