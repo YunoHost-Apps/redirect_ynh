@@ -39,13 +39,13 @@ app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
 domain=$(ynh_app_setting_get "$app" domain)
-path=$(ynh_app_setting_get "$app" path)
+path_url=$(ynh_app_setting_get "$app" path_url)
 is_public=$(ynh_app_setting_get "$app" is_public)
 redirect_type=$(ynh_app_setting_get "$app" redirect_type)
 redirect_path=$(ynh_app_setting_get "$app" redirect_path)
 
 # Remove trailing slash to path
-path=${path%/}
+path_url=${path_url%/}
 
 # Check domain/path availability
 ynh_webpath_register $app $domain $path

@@ -31,7 +31,7 @@ app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
 domain=$(ynh_app_setting_get "$app" domain)
-path=$(ynh_app_setting_get "$app" path)
+path_url=$(ynh_app_setting_get "$app" path)
 is_public=$(ynh_app_setting_get "$app" is_public)
 redirect_type=$(ynh_app_setting_get "$app" redirect_type)
 redirect_path=$(ynh_app_setting_get "$app" redirect_path)
@@ -70,9 +70,9 @@ ynh_clean_setup () {
 ynh_abort_if_errors
 
 # Remove trailing slash to path
-path=${path%/}
+path_url=${path_url%/}
 #force location to be / or /foo
-location=${path:-/}
+location=${path_url:-/}
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'

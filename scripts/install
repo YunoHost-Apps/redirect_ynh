@@ -34,18 +34,18 @@ app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
 domain=$YNH_APP_ARG_DOMAIN
-path=$YNH_APP_ARG_PATH
+path_url=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
 redirect_type=$YNH_APP_ARG_REDIRECT_TYPE
 redirect_path=$YNH_APP_ARG_REDIRECT_PATH
 
 # Remove trailing slash to path
-path=${path%/}
+path_url=${path_url%/}
 #force location to be / or /foo
-location=${path:-/}
+location=${path_url:-/}
 
 # Check domain/path availability
-ynh_webpath_register $app $domain $path
+ynh_webpath_register $app $domain $path_url
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
