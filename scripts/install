@@ -1,10 +1,24 @@
 #!/bin/bash
 
-# causes the shell to exit if any subcommand or pipeline returns a non-zero status
-set -ue
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
 
-# Source app helpers
-. /usr/share/yunohost/helpers
+# source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# RETRIEVE ARGUMENTS FROM THE MANIFEST
+#=================================================
 
 # This is a multi-instance app, meaning it can be installed several times independently
 # The id of the app as stated in the manifest is available as $YNH_APP_ID
@@ -31,8 +45,8 @@ path=${path%/}
 location=${path:-/}
 
 # Check domain/path availability
-sudo yunohost app checkurl $domain$path -a $app \
-    || (echo "Path not available: $domain$path" && exit 1)
+yunohost app checkurl $domain$path -a $app \
+    || ynh_die "Path not available: $domain$path"
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
@@ -40,32 +54,42 @@ url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=
 "Invalid destination: $redirect_path" 1
 
 # Save extra settings
-sudo yunohost app setting $app is_public -v "$is_public"
-sudo yunohost app setting $app redirect_type -v "$redirect_type"
-sudo yunohost app setting $app redirect_path -v "$redirect_path"
+yunohost app setting $app is_public -v "$is_public"
+yunohost app setting $app redirect_type -v "$redirect_type"
+yunohost app setting $app redirect_path -v "$redirect_path"
 
 # Nginx configuration
 sed -i "s@YNH_LOCATION@$location@g" ../conf/nginx-*.conf
 if [ "$redirect_type" = "visible_302" ];
 then
     sed -i "s@YNH_REDIRECT_PATH@$redirect_path@g" ../conf/nginx-visible-302.conf
-    sudo cp ../conf/nginx-visible-302.conf /etc/nginx/conf.d/$domain.d/$app.conf
+    cp ../conf/nginx-visible-302.conf /etc/nginx/conf.d/$domain.d/$app.conf
 elif [ "$redirect_type" = "visible_301" ];
 then
     sed -i "s@YNH_REDIRECT_PATH@$redirect_path@g" ../conf/nginx-visible-301.conf
-    sudo cp ../conf/nginx-visible-301.conf /etc/nginx/conf.d/$domain.d/$app.conf
+    cp ../conf/nginx-visible-301.conf /etc/nginx/conf.d/$domain.d/$app.conf
 elif [ "$redirect_type" = "proxy" ];
 then
     sed -i "s@YNH_REDIRECT_PATH@$redirect_path@g" ../conf/nginx-proxy.conf
-    sudo cp ../conf/nginx-proxy.conf /etc/nginx/conf.d/$domain.d/$app.conf
+    cp ../conf/nginx-proxy.conf /etc/nginx/conf.d/$domain.d/$app.conf
 fi
 
-# Make app public if necessary
-if [[ "$is_public" -ne 0 ]];
-then
-    sudo yunohost app setting $app unprotected_uris -v "/"
+#=================================================
+# SETUP SSOWAT
+#=================================================
+
+if [[ "$is_public" -eq 0 ]]
+then	# Remove the public access
+	ynh_app_setting_delete "$app" skipped_uris
 fi
+# Make app public if necessary
+if [[ "$is_public" -eq 1 ]]
+then
+	# unprotected_uris allows SSO credentials to be passed anyway.
+	ynh_app_setting_set "$app" unprotected_uris "/"
+fi
+
 
 # Reload Nginx and regenerate SSOwat conf
-sudo service nginx reload
-sudo yunohost app ssowatconf
+service nginx reload
+yunohost app ssowatconf

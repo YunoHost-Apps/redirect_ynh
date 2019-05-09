@@ -1,7 +1,17 @@
 #!/bin/bash
 
-# causes the shell to exit if any subcommand or pipeline returns a non-zero status
-set -e
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+# source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# LOAD SETTINGS
+#=================================================
 
 # This is a multi-instance app, meaning it can be installed several times independently
 # The id of the app as stated in the manifest is available as $YNH_APP_ID
@@ -16,11 +26,11 @@ set -e
 app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
-domain=$(sudo yunohost app setting $app domain)
+domain=$(yunohost app setting $app domain)
 
 # Remove configuration files
-sudo rm -f /etc/nginx/conf.d/$domain.d/$app.conf
+rm -f /etc/nginx/conf.d/$domain.d/$app.conf
 
 # Restart services
-sudo service nginx reload
-sudo yunohost app ssowatconf
+service nginx reload
+yunohost app ssowatconf
