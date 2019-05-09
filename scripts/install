@@ -39,11 +39,6 @@ is_public=$YNH_APP_ARG_IS_PUBLIC
 redirect_type=$YNH_APP_ARG_REDIRECT_TYPE
 redirect_path=$YNH_APP_ARG_REDIRECT_PATH
 
-# Remove trailing slash to path
-path_url=${path_url%/}
-#force location to be / or /foo
-location=${path_url:-/}
-
 # Check domain/path availability
 ynh_webpath_register $app $domain $path_url
 
@@ -59,7 +54,7 @@ ynh_app_setting_set $app redirect_path "$redirect_path"
 # Nginx configuration
 for FILE in $(ls ../conf/nginx-*.conf)
 do
-    ynh_replace_string "YNH_LOCATION" "$location" $FILE
+    ynh_replace_string "YNH_LOCATION" "$path_url" $FILE
 done
 if [ "$redirect_type" = "visible_302" ];
 then
@@ -79,12 +74,12 @@ fi
 # SETUP SSOWAT
 #=================================================
 
-if [[ "$is_public" -eq 0 ]]
+if [ $is_public -eq 0 ]
 then	# Remove the public access
 	ynh_app_setting_delete "$app" skipped_uris
 fi
 # Make app public if necessary
-if [[ "$is_public" -eq 1 ]]
+if [ $is_public -eq 1 ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway.
 	ynh_app_setting_set "$app" unprotected_uris "/"
