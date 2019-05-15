@@ -35,7 +35,6 @@ app=$YNH_APP_INSTANCE_NAME
 # Retrieve arguments
 domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
-is_public=$YNH_APP_ARG_IS_PUBLIC
 redirect_type=$YNH_APP_ARG_REDIRECT_TYPE
 redirect_path=$YNH_APP_ARG_REDIRECT_PATH
 
@@ -47,7 +46,6 @@ url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=
 [[ ! $redirect_path =~ $url_regex ]] && ynh_die "Invalid destination: $redirect_path" 1
 
 # Save extra settings
-ynh_app_setting_set $app is_public "$is_public"
 ynh_app_setting_set $app redirect_type "$redirect_type"
 ynh_app_setting_set $app redirect_path "$redirect_path"
 
@@ -56,15 +54,15 @@ for FILE in $(ls ../conf/nginx-*.conf)
 do
     ynh_replace_string "YNH_LOCATION" "$path_url" $FILE
 done
-if [ "$redirect_type" = "visible_302" ];
+if [ "$redirect_type" = "public_302" ];
 then
     ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-302.conf
     cp ../conf/nginx-visible-302.conf /etc/nginx/conf.d/$domain.d/$app.conf
-elif [ "$redirect_type" = "visible_301" ];
+elif [ "$redirect_type" = "public_301" ];
 then
     ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-301.conf
     cp ../conf/nginx-visible-301.conf /etc/nginx/conf.d/$domain.d/$app.conf
-elif [ "$redirect_type" = "proxy" ];
+elif [ "$redirect_type" = "public_proxy" ] || [ "$redirect_type" = "private_proxy" ];
 then
     ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-proxy.conf
     cp ../conf/nginx-proxy.conf /etc/nginx/conf.d/$domain.d/$app.conf
@@ -74,17 +72,12 @@ fi
 # SETUP SSOWAT
 #=================================================
 
-if [ $is_public -eq 0 ]
-then	# Remove the public access
-	ynh_app_setting_delete "$app" skipped_uris
-fi
 # Make app public if necessary
-if [ $is_public -eq 1 ]
+if [ "$redirect_type" != "private_proxy" ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway.
 	ynh_app_setting_set "$app" unprotected_uris "/"
 fi
-
 
 # Reload Nginx and regenerate SSOwat conf
 service nginx reload

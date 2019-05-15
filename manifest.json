@@ -52,30 +52,18 @@
                 "default": "http://127.0.0.1"
             },
             {
-                "name": "is_public",
-                "type": "boolean",
-                "ask": {
-                    "en": "Is it a public redirect?",
-                    "fr": "Est-ce une redirection publique ?"
-                },
-                "help": {
-                    "en": "A private redirection will only be effective for logged-in users.",
-                    "fr": "Une redirection privée ne fonctionnera que pour les utilisateurs identifiés."
-                },
-                "default": false
-            },
-            {
                 "name": "redirect_type",
                 "ask": {
                     "en": "Redirect type",
                     "fr": "Type de redirection"
                 },
                 "choices": {
-                  "visible_302" : "Visible (302, temporary redirect)",
-                  "visible_301" : "Visible (301, permanent redirect)",
-                  "proxy": "Proxy, invisible (Nginx proxy_pass)"
+                  "public_302" : "Visible redirect (302, temporary). Everybody will be able to access it.",
+                  "public_301" : "Visible redirect (301, permanent). Everybody will be able to access it.",
+                  "public_proxy": "Proxy, invisible (nginx proxy_pass). Everybody will be able to access it.",
+                  "private_proxy": "Proxy, invisible (nginx proxy_pass). Only accessible for allowed users."
                 },
-                "default": "visible_302"
+                "default": "public_302"
             }
         ]
     }
