@@ -38,7 +38,7 @@ ynh_abort_if_errors
 app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
-domain=$(yunohost app setting $app domain)
+domain=$(ynh_app_setting_get $app domain)
 
 # Copy the conf files
 mkdir -p ./conf

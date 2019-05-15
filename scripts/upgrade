@@ -31,7 +31,7 @@ app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
 domain=$(ynh_app_setting_get "$app" domain)
-path=$(ynh_app_setting_get "$app" path)
+path_url=$(ynh_app_setting_get "$app" path)
 is_public=$(ynh_app_setting_get "$app" is_public)
 redirect_type=$(ynh_app_setting_get "$app" redirect_type)
 redirect_path=$(ynh_app_setting_get "$app" redirect_path)
@@ -69,33 +69,26 @@ ynh_clean_setup () {
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
-# Remove trailing slash to path
-path=${path%/}
-#force location to be / or /foo
-location=${path:-/}
-
-# Check domain/path availability
-yunohost app checkurl $domain$path -a $app \
-    || ynh_die "Path not available: $domain$path"
-
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
-[[ ! $redirect_path =~ $url_regex ]] && ynh_die \
-"Invalid destination: $redirect_path" 1
+[[ ! $redirect_path =~ $url_regex ]] && ynh_die "Invalid destination: $redirect_path" 1
 
 # Nginx configuration
-sed -i "s@YNH_LOCATION@$location@g" ../conf/nginx-*.conf
+for FILE in $(ls ../conf/nginx-*.conf)
+do
+    ynh_replace_string "YNH_LOCATION" "$path_url" $FILE
+done
 if [ "$redirect_type" = "visible_302" ];
 then
-    sed -i "s@YNH_REDIRECT_PATH@$redirect_path@g" ../conf/nginx-visible-302.conf
+    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-302.conf
     cp ../conf/nginx-visible-302.conf /etc/nginx/conf.d/$domain.d/$app.conf
 elif [ "$redirect_type" = "visible_301" ];
 then
-    sed -i "s@YNH_REDIRECT_PATH@$redirect_path@g" ../conf/nginx-visible-301.conf
+    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-301.conf
     cp ../conf/nginx-visible-301.conf /etc/nginx/conf.d/$domain.d/$app.conf
 elif [ "$redirect_type" = "proxy" ];
 then
-    sed -i "s@YNH_REDIRECT_PATH@$redirect_path@g" ../conf/nginx-proxy.conf
+    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-proxy.conf
     cp ../conf/nginx-proxy.conf /etc/nginx/conf.d/$domain.d/$app.conf
 fi
 
@@ -103,12 +96,12 @@ fi
 # SETUP SSOWAT
 #=================================================
 
-if [[ "$is_public" -eq 0 ]]
+if [ "$is_public" -eq 0 ]
 then	# Remove the public access
 	ynh_app_setting_delete "$app" skipped_uris
 fi
 # Make app public if necessary
-if [[ "$is_public" -eq 1 ]]
+if [ "$is_public" -eq 1 ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway.
 	ynh_app_setting_set "$app" unprotected_uris -v "/"
@@ -116,4 +109,3 @@ fi
 
 # Reload Nginx and regenerate SSOwat conf
 service nginx reload
-yunohost app ssowatconf

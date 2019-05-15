@@ -39,28 +39,18 @@ app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
 domain=$(ynh_app_setting_get "$app" domain)
-path=$(ynh_app_setting_get "$app" path)
+path_url=$(ynh_app_setting_get "$app" path)
 is_public=$(ynh_app_setting_get "$app" is_public)
 redirect_type=$(ynh_app_setting_get "$app" redirect_type)
 redirect_path=$(ynh_app_setting_get "$app" redirect_path)
 
-# Remove trailing slash to path
-path=${path%/}
-
-# Check domain/path availability
-yunohost app checkurl $domain$path -a $app \
-  || die "The path ${domain}${path} is not available for app installation."
-
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
-[[ ! $redirect_path =~ $url_regex ]] && ynh_die \
-"Invalid destination: $redirect_path" 1
+[[ ! $redirect_path =~ $url_regex ]] && ynh_die "Invalid destination: $redirect_path" 1
 
 # Check configuration files
 NGINX_CONF="/etc/nginx/conf.d/${domain}.d/${app}.conf"
-[[ -f $NGINX_CONF ]] && die \
-"The NGINX configuration already exists at '${NGINX_CONF}'.
- You should safely delete it before restoring this app."
+[[ -f $NGINX_CONF ]] && ynh_die "The NGINX configuration already exists at '${NGINX_CONF}'. You should safely delete it before restoring this app."
 
 # Restore configuration files
 cp -a ./conf/nginx.conf "$NGINX_CONF"
@@ -69,12 +59,12 @@ cp -a ./conf/nginx.conf "$NGINX_CONF"
 # SETUP SSOWAT
 #=================================================
 
-if [[ "$is_public" -eq 0 ]]
+if [ "$is_public" -eq 0 ]
 then	# Remove the public access
 	ynh_app_setting_delete "$app" skipped_uris
 fi
 # Make app public if necessary
-if [[ "$is_public" -eq 1 ]]
+if [ "$is_public" -eq 1 ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway.
 	ynh_app_setting_set "$app" unprotected_uris "/"
@@ -82,4 +72,3 @@ fi
 
 # Reload Nginx and regenerate SSOwat conf
 service nginx reload
-yunohost app ssowatconf
