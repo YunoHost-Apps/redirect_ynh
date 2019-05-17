@@ -7,32 +7,16 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-# source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
 # LOAD SETTINGS
 #=================================================
 
-# This is a multi-instance app, meaning it can be installed several times independently
-# The id of the app as stated in the manifest is available as $YNH_APP_ID
-# The instance number is available as $YNH_APP_INSTANCE_NUMBER (equals "1", "2", ...)
-# The app instance name is available as $YNH_APP_INSTANCE_NAME
-#    - the first time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample
-#    - the second time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample__2
-#    - ynhexample__{N} for the subsequent installations, with N=3,4, ...
-# The app instance name is probably what you are interested the most, since this is
-# guaranteed to be unique. This is a good unique identifier to define installation path,
-# db names, ...
-app=$YNH_APP_INSTANCE_NAME
-
-# Source app helpers
-. /usr/share/yunohost/helpers
-
 # Retrieve arguments
+app=$YNH_APP_INSTANCE_NAME
 domain=$(ynh_app_setting_get "$app" domain)
 path_url=$(ynh_app_setting_get "$app" path)
-is_public=$(ynh_app_setting_get "$app" is_public)
 redirect_type=$(ynh_app_setting_get "$app" redirect_type)
 redirect_path=$(ynh_app_setting_get "$app" redirect_path)
 
@@ -41,20 +25,46 @@ redirect_path=$(ynh_app_setting_get "$app" redirect_path)
 #=================================================
 
 # Fix is_public as a boolean value
-if [ "$is_public" = "Yes" ]; then
-	ynh_app_setting_set $app is_public 1
-	is_public=1
-elif [ "$is_public" = "No" ]; then
-	ynh_app_setting_set $app is_public 0
-	is_public=0
-fi
-
 # Default value for redirect_type if upgrading from https://github.com/scith/redirect_ynh
 if [ -z "$redirect_type" ];
 then
     redirect_type="proxy"
     ynh_app_setting_set $app 'redirect_type' $redirect_type
 fi
+
+# Migrate away from old stuff with 'is_public' and old redirect type names
+is_public=$(ynh_app_setting_get "$app" is_public)
+if [ -n "$is_public" ]
+then
+    if [ "$is_public" = "Yes" ]; then
+        is_public=1
+    elif [ "$is_public" = "No" ]; then
+        is_public=0
+    fi
+
+    if [ "$is_public" = "0" ] && [ "$redirect_type" != "proxy" ]; then
+       echo "WARNING: You previously had a 'supposedly' private 301 or 302 redirection ... but it was found that it was public all along and it is not easy to create such a private redirection. Your 301 or 302 redirection will be re-flagged as public..." >&2
+       is_public=1
+    fi
+
+    if [ "$redirect_type" == "proxy" ] && [ "$is_public" = "1" ]
+    then
+        redirect_type="public_proxy"
+    elif [ "$redirect_type" == "proxy" ] && [ "$is_public" = "0" ]
+    then
+        redirect_type="private_proxy"
+    elif [ "$redirect_type" == "visible_302" ]
+    then
+        redirect_type="public_302"
+    elif [ "$redirect_type" == "visible_301" ]
+    then
+        redirect_type="public_301"
+    fi
+    
+    ynh_app_setting_set $app 'redirect_type' $redirect_type
+    ynh_app_setting_set $app 'is_public'
+fi
+
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
@@ -73,39 +83,39 @@ ynh_abort_if_errors
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
 [[ ! $redirect_path =~ $url_regex ]] && ynh_die "Invalid destination: $redirect_path" 1
 
+#=================================================
+# CONFIGURE NGINX
+#=================================================
+
 # Nginx configuration
 for FILE in $(ls ../conf/nginx-*.conf)
 do
     ynh_replace_string "YNH_LOCATION" "$path_url" $FILE
 done
-if [ "$redirect_type" = "visible_302" ];
+if [ "$redirect_type" = "public_302" ];
 then
     ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-302.conf
     cp ../conf/nginx-visible-302.conf /etc/nginx/conf.d/$domain.d/$app.conf
-elif [ "$redirect_type" = "visible_301" ];
+elif [ "$redirect_type" = "public_301" ];
 then
     ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-301.conf
     cp ../conf/nginx-visible-301.conf /etc/nginx/conf.d/$domain.d/$app.conf
-elif [ "$redirect_type" = "proxy" ];
+elif [ "$redirect_type" = "public_proxy" ] || [ "$redirect_type" = "private_proxy" ];
 then
     ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-proxy.conf
     cp ../conf/nginx-proxy.conf /etc/nginx/conf.d/$domain.d/$app.conf
 fi
 
 #=================================================
-# SETUP SSOWAT
+# CONFIGURE SSOWAT
 #=================================================
 
-if [ "$is_public" -eq 0 ]
-then	# Remove the public access
-	ynh_app_setting_delete "$app" skipped_uris
-fi
 # Make app public if necessary
-if [ "$is_public" -eq 1 ]
+if [ "$redirect_type" != "private_proxy" ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set "$app" unprotected_uris -v "/"
+	ynh_app_setting_set "$app" unprotected_uris "/"
 fi
 
 # Reload Nginx and regenerate SSOwat conf
-service nginx reload
+systemctl reload nginx
