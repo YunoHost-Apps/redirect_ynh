@@ -25,6 +25,7 @@ domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 redirect_type=$YNH_APP_ARG_REDIRECT_TYPE
 redirect_path=$YNH_APP_ARG_REDIRECT_PATH
+c=$YNH_APP_ARG_NGINX_CUSTOM_CONFIG
 
 # Check domain/path availability
 ynh_webpath_register $app $domain $path_url
@@ -45,6 +46,7 @@ ynh_app_setting_set $app redirect_path "$redirect_path"
 for FILE in $(ls ../conf/nginx-*.conf)
 do
     ynh_replace_string "YNH_LOCATION" "$path_url" $FILE
+    ynh_replace_string "YNH_CUSTOM_CONFIG" "$nginx_custom_config" $FILE
 done
 if [ "$redirect_type" = "public_302" ];
 then

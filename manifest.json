@@ -64,6 +64,14 @@
                   "private_proxy": "Proxy, invisible (nginx proxy_pass). Only accessible for allowed users."
                 },
                 "default": "public_302"
+            },
+            {
+                "name": "nginx_custom_config",
+                "type": "nginx_config",
+                "ask": {
+                    "en": "Custom NGINX config (optional)"
+                },
+                "default": ""
             }
         ]
     }
