@@ -53,6 +53,12 @@ url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=
 [[ ! $redirect_path =~ $url_regex ]] && ynh_die \
 "Invalid destination: $redirect_path" 1
 
+# Avoid uncrypted remote destination with reverse proxy mode
+# Indeed the SSO send the password in all requests in HTTP headers
+url_regex='(http://(127.\d+.\d+.\d+|localhost)(:\d+)?/|https://)[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
+[[ "$redirect_type" = "proxy" ]] && [[ ! $redirect_path =~ $url_regex ]] && ynh_die \
+"For secure reason, you can't use an unencrypted http remote destination couple with ssowat for your reverse proxy: $redirect_path" 1
+
 # Save extra settings
 yunohost app setting $app is_public -v "$is_public"
 yunohost app setting $app redirect_type -v "$redirect_type"
