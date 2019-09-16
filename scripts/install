@@ -55,7 +55,7 @@ url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=
 
 # Avoid uncrypted remote destination with reverse proxy mode
 # Indeed the SSO send the password in all requests in HTTP headers
-url_regex='(http://(127.\d+.\d+.\d+|localhost)(:\d+)?/|https://)[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
+url_regex='^(http://(127\.[0-9]+\.[0-9]+\.[0-9]+|localhost)|https://.*)(:[0-9]+)?(/.*)?$'
 [[ "$redirect_type" = "proxy" ]] && [[ ! $redirect_path =~ $url_regex ]] && ynh_die \
 "For secure reason, you can't use an unencrypted http remote destination couple with ssowat for your reverse proxy: $redirect_path" 1
 
