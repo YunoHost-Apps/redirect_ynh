@@ -35,6 +35,10 @@ In case of a private redirect, the app will be available to logged in users only
 
 **IMPORTANT:** Make sure that the app you want to protect CANNOT be accessed by its port or another direct link. Otherwise, your app will only be protected in YunoHost but would still be available through its direct link. In the case of a Docker container, the port of the container will have to be local (e.g., -p 127.0.0.1:9000:9000).
 
+## Direct redirect
+
+The standard public redirect can fail when trying to redirect a web application (or another domain). When redirecting one application to another domain, use this option.
+
 ## Case examples
 
 - **Creating a tile for a Docker container** with a local port (e.g., -p 127.0.0.1:PORT:PORT): proxy redirect to http://127.0.0.1:PORT-OF-THE-CONTAINER/
@@ -44,6 +48,8 @@ In case of a private redirect, the app will be available to logged in users only
 - [CozyCloud behind YunoHost?](https://forum.cozy.io/t/cozy-cloud-sous-yunohost/616/11)
 
 - **Creating a tile and protecting apps that are difficult to package natively (or for prototyping)**
+
+- **Pointing another domain to the same app**: Proxy, invisible direct. Select your domain and the redirect path, for example: www.myapp.com/ -> myapp.mydomain.com/
 
 
 **_Feel free to [share your case examples and customized Nginx files on the forum](https://forum.yunohost.org/t/2182)._**
