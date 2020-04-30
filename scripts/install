@@ -50,6 +50,10 @@ mkdir -p /etc/nginx/conf.d/block_ip
 cp ../conf/ip.conf /etc/nginx/conf.d/block_ip/ip_"$app".conf
 fi
 
+if [ "$block_ip" -eq 0 ]; then
+ynh_replace_string "__ADD_BLOCK_IP__" "" "../conf/nginx-proxy.conf"
+fi
+
 #=================================================
 # CONFIGURE NGINX
 #=================================================
