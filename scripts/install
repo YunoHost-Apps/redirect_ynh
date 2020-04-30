@@ -71,6 +71,10 @@ elif [ "$redirect_type" = "public_301" ];
 then
     ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-301.conf
     cp ../conf/nginx-visible-301.conf /etc/nginx/conf.d/"$domain".d/"$app".conf
+elif [ "$redirect_type" = "public_direct" ];
+then
+    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-proxy-direct.conf
+    cp ../conf/nginx-proxy-direct.conf /etc/nginx/conf.d/"$domain".d/"$app".conf
 elif [ "$redirect_type" = "public_proxy" ] || [ "$redirect_type" = "private_proxy" ];
 then
     ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-proxy.conf
