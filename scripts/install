@@ -23,19 +23,32 @@ ynh_abort_if_errors
 app=$YNH_APP_INSTANCE_NAME
 domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
+block_ip=$YNH_APP_ARG_BLOCK_IP
+what_ip=$YNH_APP_ARG_WHAT_IP
 redirect_type=$YNH_APP_ARG_REDIRECT_TYPE
 redirect_path=$YNH_APP_ARG_REDIRECT_PATH
 
 # Check domain/path availability
-ynh_webpath_register $app $domain $path_url
+ynh_webpath_register "$app" "$domain" "$path_url"
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
 [[ ! $redirect_path =~ $url_regex ]] && ynh_die "Invalid destination: $redirect_path" 1
 
 # Save extra settings
-ynh_app_setting_set $app redirect_type "$redirect_type"
-ynh_app_setting_set $app redirect_path "$redirect_path"
+ynh_app_setting_set "$app" redirect_type "$redirect_type"
+ynh_app_setting_set "$app" redirect_path "$redirect_path"
+
+#=================================================
+# BLOCK IP
+#=================================================
+
+if [ "$block_ip" -eq 1 ]; then
+ynh_replace_string "__IP__" "$what_ip" "../conf/ip.conf"
+ynh_replace_string "__ADD_BLOCK_IP__" "include conf.d/block_ip/ip_$app.conf;" "../conf/nginx-proxy.conf"
+mkdir -p /etc/nginx/conf.d/block_ip
+cp ../conf/blockips.conf /etc/nginx/conf.d/block_ip/ip_"$app".conf
+fi
 
 #=================================================
 # CONFIGURE NGINX
@@ -44,20 +57,20 @@ ynh_app_setting_set $app redirect_path "$redirect_path"
 # Nginx configuration
 for FILE in $(ls ../conf/nginx-*.conf)
 do
-    ynh_replace_string "YNH_LOCATION" "$path_url" $FILE
+    ynh_replace_string "YNH_LOCATION" "$path_url" "$FILE"
 done
 if [ "$redirect_type" = "public_302" ];
 then
     ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-302.conf
-    cp ../conf/nginx-visible-302.conf /etc/nginx/conf.d/$domain.d/$app.conf
+    cp ../conf/nginx-visible-302.conf /etc/nginx/conf.d/"$domain".d/"$app".conf
 elif [ "$redirect_type" = "public_301" ];
 then
     ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-301.conf
-    cp ../conf/nginx-visible-301.conf /etc/nginx/conf.d/$domain.d/$app.conf
+    cp ../conf/nginx-visible-301.conf /etc/nginx/conf.d/"$domain".d/"$app".conf
 elif [ "$redirect_type" = "public_proxy" ] || [ "$redirect_type" = "private_proxy" ];
 then
     ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-proxy.conf
-    cp ../conf/nginx-proxy.conf /etc/nginx/conf.d/$domain.d/$app.conf
+    cp ../conf/nginx-proxy.conf /etc/nginx/conf.d/"$domain".d/"$app".conf
 fi
 
 #=================================================

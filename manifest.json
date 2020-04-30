@@ -52,6 +52,25 @@
                 "default": "http://127.0.0.1"
             },
             {
+                "name": "block_ip",
+                "type": "boolean",
+                "ask": {
+                    "en": "Want IP access ?",
+                    "fr": "Voulez un accès par IP ?"
+                },
+                "default": "false"
+            },
+            {
+                "name": "what_ip",
+                "type": "string",
+                "ask": {
+                    "en": "Which IP (Optional) ?",
+                    "fr": "Quel IP (Optionnel) ?"
+                },
+                "example": "allow 1.2.3.4/24; deny all;",
+                "default": "allow 1.2.3.4/24; deny all;"
+            },
+            {
                 "name": "redirect_type",
                 "ask": {
                     "en": "Redirect type",
