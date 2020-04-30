@@ -47,7 +47,7 @@ if [ "$block_ip" -eq 1 ]; then
 ynh_replace_string "__IP__" "$what_ip" "../conf/ip.conf"
 ynh_replace_string "__ADD_BLOCK_IP__" "include conf.d/block_ip/ip_$app.conf;" "../conf/nginx-proxy.conf"
 mkdir -p /etc/nginx/conf.d/block_ip
-cp ../conf/blockips.conf /etc/nginx/conf.d/block_ip/ip_"$app".conf
+cp ../conf/ip.conf /etc/nginx/conf.d/block_ip/ip_"$app".conf
 fi
 
 #=================================================
