@@ -31,6 +31,10 @@ All rules is located in `/etc/nginx/conf.d/block_ip/`
 
 **IMPORTANT:** the redirect.conf file might need to be updated according to your situation!
 
+## Direct redirect
+
+The standard public redirect can fail when trying to redirect a web application (or another domain). When redirecting one application to another domain, use this option.
+
 **WARNING:** Many apps do not support being redirected to a different path due to relative links! This means that some apps being hosted for example on http://127.0.0.1:5050/app/ HAVE TO be redirected to http://domain.tld/app/ and NOT http://domain.tld/someotherapp/
 
 *Concrete example:* the Odoo Docker container runs on http://127.0.0.1:8069/. You will not be able to redirect it to http://domain.tld/odoo/ ! You have to redirect it to the root, so for example http://odoo.domain.tld/
@@ -50,6 +54,8 @@ In case of a private redirect, the app will be available to logged in users only
 - [CozyCloud behind YunoHost?](https://forum.cozy.io/t/cozy-cloud-sous-yunohost/616/11)
 
 - **Creating a tile and protecting apps that are difficult to package natively (or for prototyping)**
+
+- **Pointing another domain to the same app**: Proxy, invisible direct. Select your domain and the redirect path, for example: www.myapp.com/ -> myapp.mydomain.com/
 
 
 **_Feel free to [share your case examples and customized Nginx files on the forum](https://forum.yunohost.org/t/2182)._**
