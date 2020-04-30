@@ -55,8 +55,8 @@
                 "name": "block_ip",
                 "type": "boolean",
                 "ask": {
-                    "en": "Want IP access ?",
-                    "fr": "Voulez un accès par IP ?"
+                    "en": "Do you want to limit access by IP ?",
+                    "fr": "Voulez-vous limiter l'accès par IP ?"
                 },
                 "default": "false"
             },
