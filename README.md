@@ -27,6 +27,8 @@ for a personnal application.
 This option is only for proxy_pass.
 Use this option for Public no need this in Private.
 
+All rules is located in `/etc/nginx/conf.d/block_ip/`
+
 **IMPORTANT:** the redirect.conf file might need to be updated according to your situation!
 
 **WARNING:** Many apps do not support being redirected to a different path due to relative links! This means that some apps being hosted for example on http://127.0.0.1:5050/app/ HAVE TO be redirected to http://domain.tld/app/ and NOT http://domain.tld/someotherapp/
