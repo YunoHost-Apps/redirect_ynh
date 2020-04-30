@@ -33,9 +33,12 @@ url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=
 # Check configuration files
 NGINX_CONF="/etc/nginx/conf.d/${domain}.d/${app}.conf"
 [[ -f $NGINX_CONF ]] && ynh_die "The NGINX configuration already exists at '${NGINX_CONF}'. You should safely delete it before restoring this app."
+IP_CONF="/etc/nginx/conf.d/block_ip/ip_${app}.conf"
+[[ -f $IP_CONF ]] && ynh_die "The IP configuration already exists at '${IP_CONF}'. You should safely delete it before restoring this app."
 
 # Restore configuration files
 ynh_restore_file "$NGINX_CONF"
+ynh_restore_file "$IP_CONF"
 
 #=================================================
 # CONFIGURE SSOWAT
