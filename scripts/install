@@ -46,12 +46,14 @@ ynh_app_setting_set "$app" redirect_path "$redirect_path"
 if [ "$block_ip" -eq 1 ]; then
 ynh_replace_string "__IP__" "$what_ip" "../conf/ip.conf"
 ynh_replace_string "__ADD_BLOCK_IP__" "include conf.d/block_ip/ip_$app.conf;" "../conf/nginx-proxy.conf"
+ynh_replace_string "__ADD_BLOCK_IP__" "include conf.d/block_ip/ip_$app.conf;" "../conf/nginx-proxy-direct.conf"
 mkdir -p /etc/nginx/conf.d/block_ip
 cp ../conf/ip.conf /etc/nginx/conf.d/block_ip/ip_"$app".conf
 fi
 
 if [ "$block_ip" -eq 0 ]; then
 ynh_replace_string "__ADD_BLOCK_IP__" "allow all;" "../conf/nginx-proxy.conf"
+ynh_replace_string "__ADD_BLOCK_IP__" "allow all;" "../conf/nginx-proxy-direct.conf"
 fi
 
 #=================================================
