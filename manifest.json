@@ -80,6 +80,7 @@
                   "public_302" : "Visible redirect (302, temporary). Everybody will be able to access it.",
                   "public_301" : "Visible redirect (301, permanent). Everybody will be able to access it.",
                   "public_proxy": "Proxy, invisible (nginx proxy_pass). Everybody will be able to access it.",
+                  "public_direct": "Proxy, invisible direct (nginx proxy_pass). Everybody will be able to access it. No forward headers.",
                   "private_proxy": "Proxy, invisible (nginx proxy_pass). Only accessible for allowed users."
                 },
                 "default": "public_302"
