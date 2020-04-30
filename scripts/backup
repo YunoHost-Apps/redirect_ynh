@@ -21,7 +21,8 @@ ynh_abort_if_errors
 
 # Retrieve arguments
 app=$YNH_APP_INSTANCE_NAME
-domain=$(ynh_app_setting_get $app domain)
+domain=$(ynh_app_setting_get "$app" domain)
 
 # Copy the conf files
-ynh_backup "/etc/nginx/conf.d/${domain}.d/${app}.conf"
+ynh_backup "/etc/nginx/conf.d/${domain}.d/.conf"
+ynh_backup "/etc/nginx/conf.d/block_ip/ip_${app}.conf"
