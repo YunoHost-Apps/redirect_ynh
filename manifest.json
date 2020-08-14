@@ -65,7 +65,7 @@
                 "type": "string",
                 "ask": {
                     "en": "Which IP (Optional) ?",
-                    "fr": "Quel IP (Optionnel) ?"
+                    "fr": "Quelle IP (Optionnel) ?"
                 },
                 "example": "allow 1.2.3.4/24; deny all;",
                 "default": "allow 1.2.3.4/24; deny all;"
