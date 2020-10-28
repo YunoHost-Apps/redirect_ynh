@@ -3,7 +3,7 @@
     "id": "redirect",
     "packaging_format": 1,
     "requirements": {
-        "yunohost": ">= 2.7.12"
+        "yunohost": ">= 3.8"
     },
     "description": {
         "en": "Create a redirection or a proxy to another path.",
