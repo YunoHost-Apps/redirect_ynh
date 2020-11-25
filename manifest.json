@@ -71,6 +71,25 @@
                 "default": "allow 1.2.3.4/24; deny all;"
             },
             {
+                "name": "rsyslog",
+                "type": "boolean",
+                "ask": {
+                    "en": "Do you want to active rsyslog ?",
+                    "fr": "Voulez-vous activer rsyslog ?"
+                },
+                "default": "false"
+            },
+            {
+                "name": "rsyslog_ip",
+                "type": "string",
+                "ask": {
+                    "en": "Which IP (Optional) ?",
+                    "fr": "Quelle IP (Optionnel) ?"
+                },
+                "example": "127.0.0.1:514",
+                "default": "127.0.0.1:514"
+            },
+            {
                 "name": "redirect_type",
                 "ask": {
                     "en": "Redirect type",
