@@ -68,8 +68,8 @@ ynh_replace_string "__ADD_RSYSLOG_IP__" "$rsyslog_ip" "../conf/nginx-proxy-direc
 fi
 
 if [ "$rsyslog" -eq 0 ]; then
-ynh_replace_string "__ADD_RSYSLOG_IP__" "127.0.0.1:514" "../conf/nginx-proxy.conf"
-ynh_replace_string "__ADD_RSYSLOG_IP__" "127.0.0.1:514" "../conf/nginx-proxy-direct.conf"
+ynh_replace_string "access_log syslog:server=__ADD_RSYSLOG_IP__,facility=local7,tag=nginx,severity=info;" "# Disable" "../conf/nginx-proxy.conf"
+ynh_replace_string "error_log syslog:server=__ADD_RSYSLOG_IP__,facility=local7,tag=nginx,severity=error;" "# Disable" "../conf/nginx-proxy-direct.conf"
 fi
 
 #=================================================
