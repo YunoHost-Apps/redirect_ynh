@@ -25,6 +25,7 @@ domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 block_ip=$YNH_APP_ARG_BLOCK_IP
 what_ip=$YNH_APP_ARG_WHAT_IP
+rsyslog=$YNH_APP_ARG_RSYSLOG
 rsyslog_ip=$YNH_APP_ARG_RSYSLOG_IP
 redirect_type=$YNH_APP_ARG_REDIRECT_TYPE
 redirect_path=$YNH_APP_ARG_REDIRECT_PATH
@@ -61,12 +62,12 @@ fi
 # RSYSLOG IP
 #=================================================
 
-if [ "$rsyslog_ip" -eq 1 ]; then
-ynh_replace_string "__ADD_RSYSLOG_IP__" "../conf/nginx-proxy.conf"
-ynh_replace_string "__ADD_RSYSLOG_IP__" "../conf/nginx-proxy-direct.conf"
+if [ "$rsyslog" -eq 1 ]; then
+ynh_replace_string "__ADD_RSYSLOG_IP__" "$rsyslog_ip" "../conf/nginx-proxy.conf"
+ynh_replace_string "__ADD_RSYSLOG_IP__" "$rsyslog_ip" "../conf/nginx-proxy-direct.conf"
 fi
 
-if [ "$rsyslog_ip" -eq 0 ]; then
+if [ "$rsyslog" -eq 0 ]; then
 ynh_replace_string "__ADD_RSYSLOG_IP__" "127.0.0.1:514" "../conf/nginx-proxy.conf"
 ynh_replace_string "__ADD_RSYSLOG_IP__" "127.0.0.1:514" "../conf/nginx-proxy-direct.conf"
 fi
