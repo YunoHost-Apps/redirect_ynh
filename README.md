@@ -1,8 +1,11 @@
-# Redirect App
+# Redirect App for Yunohost
+
+[![Integration level](https://dash.yunohost.org/integration/redirect.svg)](https://dash.yunohost.org/appci/app/redirect) ![](https://ci-apps.yunohost.org/ci/badges/redirect.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/redirect.maintain.svg)  
+[![Install Redirect with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=redirect)
 
 **Add a link on your user panel redirecting to another page or app, which can be protected behind your panel for some**.
 
-It could be an invisible redirect, an external link, another app on your local network, a reverse proxy to an app or a Docker container... Some apps can be even be protected behind your panel (meaning that you will have to log-in to access them). The only limit is your imagination - and Nginx ;).
+It could be an invisible redirect, an external link, another app on your local network, a reverse proxy to an app or a Docker container... Some apps can be even be protected behind your panel (meaning that you will have to log-in to access them). The only limit is your imagination - and NGINX ;).
 
 This app only adds a Nginx configuration file with `redirect` or `proxy_pass` rule, and a YunoHost tile. Nothing more.
 
@@ -10,20 +13,18 @@ This app only adds a Nginx configuration file with `redirect` or `proxy_pass` ru
 
 ### Visible redirect
 
-Visitor's address bar will change. Helpfull to add a user link to another 
-website
+Visitor's address bar will change. Helpfull to add a user link to another website
 
     you-domain.com -> another-domain.net
     you-domain.com/foo -> another-domain.net/bar
 
 ### Invisible (proxy) redirect
 
-Visitor's address bar will remain the same. Mostly use to serve local webserver 
-for a personnal application.
+Visitor's address bar will remain the same. Mostly use to serve local webserver for a personnal application.
     
     you-domain.com/foo -> http://172.0.0.1:8080/app
 
-**IMPORTANT:** the redirect.conf file might need to be updated according to your situation!
+**IMPORTANT:** the `redirect.conf` file might need to be updated according to your situation!
 
 **WARNING:** Many apps do not support being redirected to a different path due to relative links! This means that some apps being hosted for example on http://127.0.0.1:5050/app/ HAVE TO be redirected to http://domain.tld/app/ and NOT http://domain.tld/someotherapp/
 

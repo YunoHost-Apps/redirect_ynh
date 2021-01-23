@@ -27,19 +27,20 @@ redirect_type=$YNH_APP_ARG_REDIRECT_TYPE
 redirect_path=$YNH_APP_ARG_REDIRECT_PATH
 
 # Check domain/path availability
-ynh_webpath_register $app $domain $path_url
+ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
 [[ ! $redirect_path =~ $url_regex ]] && ynh_die "Invalid destination: $redirect_path" 1
 
 # Save extra settings
-ynh_app_setting_set $app redirect_type "$redirect_type"
-ynh_app_setting_set $app redirect_path "$redirect_path"
+ynh_app_setting_set --app=$app --key=redirect_type --value=$redirect_type
+ynh_app_setting_set --app=$app --key=redirect_path --value=$redirect_path
 
 #=================================================
 # CONFIGURE NGINX
 #=================================================
+ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
 # Nginx configuration
 for FILE in $(ls ../conf/nginx-*.conf)
@@ -63,13 +64,24 @@ fi
 #=================================================
 # CONFIGURE SSOWAT
 #=================================================
+ynh_script_progression --message="Configuring permissions..." --weight=2
 
 # Make app public if necessary
 if [ "$redirect_type" != "private_proxy" ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set "$app" unprotected_uris "/"
+	ynh_permission_update --permission="main" --add="visitors"
 fi
 
-# Reload Nginx and regenerate SSOwat conf
-systemctl reload nginx
+#=================================================
+# RELOAD NGINX
+#=================================================
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
+
+ynh_systemd_action --service_name=nginx --action=reload
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Installation of $app completed" --last

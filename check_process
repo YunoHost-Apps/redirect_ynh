@@ -19,7 +19,6 @@
 		upgrade=1
 		backup_restore=1
 		multi_instance=1
-		incorrect_path=0
 		port_already_use=0
 		change_url=0
 ;;; Options
