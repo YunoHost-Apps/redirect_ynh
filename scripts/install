@@ -62,6 +62,9 @@ fi
 # RSYSLOG IP
 #=================================================
 
+ynh_replace_string "__ADD_DOMAIN__" "$domain" "../conf/nginx-proxy.conf"
+ynh_replace_string "__ADD_DOMAIN__" "$domain" "../conf/nginx-proxy-direct.conf"
+
 if [ "$rsyslog" -eq 1 ]; then
 ynh_replace_string "__ADD_RSYSLOG_IP__" "$rsyslog_ip" "../conf/nginx-proxy.conf"
 ynh_replace_string "__ADD_RSYSLOG_IP__" "$rsyslog_ip" "../conf/nginx-proxy-direct.conf"
