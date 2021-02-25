@@ -9,7 +9,7 @@
         "en": "Create a redirection or a proxy to another path.",
         "fr": "Créer une redirection ou un proxy vers un autre emplacement"
     },
-    "version": "1.0.0~ynh4",
+    "version": "1.0.1~ynh1",
     "license": "AGPL-3.0-or-later",
     "url": "https://github.com/YunoHost-Apps/redirect_ynh",
     "maintainer": {
@@ -52,6 +52,44 @@
                 "default": "http://127.0.0.1"
             },
             {
+                "name": "block_ip",
+                "type": "boolean",
+                "ask": {
+                    "en": "Do you want to limit access by IP ?",
+                    "fr": "Voulez-vous limiter l'accès par IP ?"
+                },
+                "default": "false"
+            },
+            {
+                "name": "what_ip",
+                "type": "string",
+                "ask": {
+                    "en": "Which IP (Optional) ?",
+                    "fr": "Quelle IP (Optionnel) ?"
+                },
+                "example": "allow 1.2.3.4/24; deny all;",
+                "default": "allow 1.2.3.4/24; deny all;"
+            },
+            {
+                "name": "rsyslog",
+                "type": "boolean",
+                "ask": {
+                    "en": "Do you want to active rsyslog ?",
+                    "fr": "Voulez-vous activer rsyslog ?"
+                },
+                "default": "false"
+            },
+            {
+                "name": "rsyslog_ip",
+                "type": "string",
+                "ask": {
+                    "en": "Which IP (Optional) ?",
+                    "fr": "Quelle IP (Optionnel) ?"
+                },
+                "example": "127.0.0.1:514",
+                "default": "127.0.0.1:514"
+            },
+            {
                 "name": "redirect_type",
                 "ask": {
                     "en": "Redirect type",
@@ -61,6 +99,7 @@
                   "public_302" : "Visible redirect (302, temporary). Everybody will be able to access it.",
                   "public_301" : "Visible redirect (301, permanent). Everybody will be able to access it.",
                   "public_proxy": "Proxy, invisible (nginx proxy_pass). Everybody will be able to access it.",
+                  "public_direct": "Proxy, invisible direct (nginx proxy_pass). Everybody will be able to access it. No forward headers.",
                   "private_proxy": "Proxy, invisible (nginx proxy_pass). Only accessible for allowed users."
                 },
                 "default": "public_302"

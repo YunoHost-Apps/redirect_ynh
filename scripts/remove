@@ -14,10 +14,11 @@ source /usr/share/yunohost/helpers
 
 # Retrieve arguments
 app=$YNH_APP_INSTANCE_NAME
-domain=$(ynh_app_setting_get $app domain)
+domain=$(ynh_app_setting_get "$app" domain)
 
 # Remove configuration files
-ynh_secure_remove /etc/nginx/conf.d/$domain.d/$app.conf
+ynh_secure_remove /etc/nginx/conf.d/"$domain".d/"$app".conf
+ynh_secure_remove /etc/nginx/conf.d/block_ip/ip_"$app".conf
 
 # Restart services
 systemctl reload nginx
