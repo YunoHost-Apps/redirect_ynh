@@ -64,11 +64,11 @@ fi
 # CONFIGURE SSOWAT
 #=================================================
 
-# Make app public if necessary
+
 if [ "$redirect_type" != "private_proxy" ]
 then
-	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set "$app" unprotected_uris "/"
+
+
 fi
 
 # Reload Nginx and regenerate SSOwat conf
