@@ -9,12 +9,16 @@
     "version": "1.0.0~ynh5",
     "license": "AGPL-3.0-or-later",
     "url": "https://github.com/YunoHost-Apps/redirect_ynh",
+    "upstream": {
+        "license": "AGPL-3.0-or-later",
+        "website": "https://github.com/YunoHost-Apps/redirect_ynh"
+    },
     "maintainer": {
         "name": "alexAubin",
         "email": "alex.aubin@mailoo.org"
     },
         "requirements": {
-        "yunohost": ">= 3.8.1"
+        "yunohost": ">= 4.2.0"
     },
     "multi_instance": true,
     "services": [
