@@ -29,19 +29,11 @@
             {
                 "name": "domain",
                 "type": "domain",
-                "ask": {
-                    "en": "Choose a domain for your redirect",
-                    "fr": "Choisissez un domaine pour votre redirection"
-                },
                 "example": "domain.org"
             },
             {
                 "name": "path",
                 "type": "path",
-                "ask": {
-                    "en": "Choose a path for your redirect",
-                    "fr": "Choisissez un chemin pour votre redirection"
-                },
                 "example": "/redirect",
                 "default": "/redirect"
             },
