@@ -33,6 +33,12 @@ ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
 [[ ! $redirect_path =~ $url_regex ]] && ynh_die "Invalid destination: $redirect_path" 1
 
+# Avoid uncrypted remote destination with reverse proxy mode
+# Indeed the SSO send the password in all requests in HTTP headers
+url_regex='^(http://(127\.[0-9]+\.[0-9]+\.[0-9]+|localhost)|https://.*)(:[0-9]+)?(/.*)?$'
+[[ "$redirect_type" = "proxy" ]] && [[ ! $redirect_path =~ $url_regex ]] && ynh_die \
+"For secure reason, you can't use an unencrypted http remote destination couple with ssowat for your reverse proxy: $redirect_path" 1
+
 # Save extra settings
 ynh_app_setting_set --app=$app --key=redirect_type --value=$redirect_type
 ynh_app_setting_set --app=$app --key=redirect_path --value=$redirect_path
