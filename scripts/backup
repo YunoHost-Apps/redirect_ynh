@@ -6,12 +6,6 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-# if [ ! -e _common.sh ]; then
-	# Get the _common.sh file if it's not in the current directory
-# 	cp ../settings/scripts/_common.sh ./_common.sh
-# 	chmod a+rx _common.sh
-# fi
-# source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -24,22 +18,21 @@ ynh_abort_if_errors
 #=================================================
 # LOAD SETTINGS
 #=================================================
-
-# This is a multi-instance app, meaning it can be installed several times independently
-# The id of the app as stated in the manifest is available as $YNH_APP_ID
-# The instance number is available as $YNH_APP_INSTANCE_NUMBER (equals "1", "2", ...)
-# The app instance name is available as $YNH_APP_INSTANCE_NAME
-#    - the first time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample
-#    - the second time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample__2
-#    - ynhexample__{N} for the subsequent installations, with N=3,4, ...
-# The app instance name is probably what you are interested the most, since this is
-# guaranteed to be unique. This is a good unique identifier to define installation path,
-# db names, ...
-app=$YNH_APP_INSTANCE_NAME
+ynh_print_info --message="Loading installation settings..."
 
 # Retrieve arguments
-domain=$(yunohost app setting $app domain)
+app=$YNH_APP_INSTANCE_NAME
+domain=$(ynh_app_setting_get $app domain)
+
+#=================================================
+# BACKUP THE NGINX CONFIGURATION
+#=================================================
 
 # Copy the conf files
-mkdir -p ./conf
-cp -a "/etc/nginx/conf.d/${domain}.d/${app}.conf" ./conf/nginx.conf
+ynh_backup "/etc/nginx/conf.d/${domain}.d/${app}.conf"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_print_info --message="Backup script completed for $app. (YunoHost will then actually copy those files to the archive)."

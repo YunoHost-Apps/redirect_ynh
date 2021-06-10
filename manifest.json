@@ -2,19 +2,23 @@
     "name": "Redirect",
     "id": "redirect",
     "packaging_format": 1,
-    "requirements": {
-        "yunohost": ">= 2.7.12"
-    },
     "description": {
         "en": "Create a redirection or a proxy to another path.",
         "fr": "Créer une redirection ou un proxy vers un autre emplacement"
     },
-    "version": "1.0.0~ynh2",
-    "url": "https://github.com/YunoHost-Apps/redirect_ynh",
+    "version": "1.0.0~ynh5",
     "license": "AGPL-3.0-or-later",
+    "url": "https://github.com/YunoHost-Apps/redirect_ynh",
+    "upstream": {
+        "license": "AGPL-3.0-or-later",
+        "website": "https://github.com/YunoHost-Apps/redirect_ynh"
+    },
     "maintainer": {
-        "name": "opi",
-        "email": "opi@zeropi.net"
+        "name": "alexAubin",
+        "email": "alex.aubin@mailoo.org"
+    },
+    "requirements": {
+        "yunohost": ">= 4.2.0"
     },
     "multi_instance": true,
     "services": [
@@ -25,24 +29,17 @@
             {
                 "name": "domain",
                 "type": "domain",
-                "ask": {
-                    "en": "Choose a domain for your redirect",
-                    "fr": "Choisissez un domaine pour votre redirection"
-                },
                 "example": "domain.org"
             },
             {
                 "name": "path",
                 "type": "path",
-                "ask": {
-                    "en": "Choose a path for your redirect",
-                    "fr": "Choisissez un chemin pour votre redirection"
-                },
                 "example": "/redirect",
                 "default": "/redirect"
             },
             {
                 "name": "redirect_path",
+                "type": "string",
                 "ask": {
                     "en": "Redirect destination path",
                     "fr": "Emplacement de destination"
@@ -51,26 +48,19 @@
                 "default": "http://127.0.0.1"
             },
             {
-                "name": "is_public",
-                "type": "boolean",
-                "ask": {
-                    "en": "Is it a public redirect?",
-                    "fr": "Est-ce une redirection publique ?"
-                },
-                "default": false
-            },
-            {
                 "name": "redirect_type",
+                "type": "string",
                 "ask": {
                     "en": "Redirect type",
                     "fr": "Type de redirection"
                 },
                 "choices": {
-                  "visible_302" : "Visible (302, temporary redirect)",
-                  "visible_301" : "Visible (301, permanent redirect)",
-                  "proxy": "Proxy, invisible (Nginx proxy_pass)"
+                  "public_302" : "Visible redirect (302, temporary). Everybody will be able to access it.",
+                  "public_301" : "Visible redirect (301, permanent). Everybody will be able to access it.",
+                  "public_proxy": "Proxy, invisible (nginx proxy_pass). Everybody will be able to access it.",
+                  "private_proxy": "Proxy, invisible (nginx proxy_pass). Only accessible for allowed users."
                 },
-                "default": "visible_302"
+                "default": "public_302"
             }
         ]
     }
