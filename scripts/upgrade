@@ -15,10 +15,10 @@ source /usr/share/yunohost/helpers
 
 # Retrieve arguments
 app=$YNH_APP_INSTANCE_NAME
-domain=$(ynh_app_setting_get "$app" domain)
-path_url=$(ynh_app_setting_get "$app" path)
-redirect_type=$(ynh_app_setting_get "$app" redirect_type)
-redirect_path=$(ynh_app_setting_get "$app" redirect_path)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
+redirect_type=$(ynh_app_setting_get --app=$app --key=redirect_type)
+redirect_path=$(ynh_app_setting_get --app=$app --key=redirect_path)
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -43,7 +43,7 @@ then
     fi
 
     if [ "$is_public" = "0" ] && [ "$redirect_type" != "proxy" ]; then
-       echo "WARNING: You previously had a 'supposedly' private 301 or 302 redirection ... but it was found that it was public all along and it is not easy to create such a private redirection. Your 301 or 302 redirection will be re-flagged as public..." >&2
+       echo "WARNING: You previously had a 'supposedly' private 301 or 302 redirection... but it was found that it was public all along and it is not easy to create such a private redirection. Your 301 or 302 redirection will be re-flagged as public..." >&2
        is_public=1
     fi
 

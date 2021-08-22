@@ -3,7 +3,7 @@
     "id": "redirect",
     "packaging_format": 1,
     "description": {
-        "en": "Create a redirection or a proxy to another path.",
+        "en": "Create a redirection or a proxy to another path",
         "fr": "Créer une redirection ou un proxy vers un autre emplacement"
     },
     "version": "1.0.0~ynh5",
@@ -55,10 +55,10 @@
                     "fr": "Type de redirection"
                 },
                 "choices": {
-                  "public_302" : "Visible redirect (302, temporary). Everybody will be able to access it.",
-                  "public_301" : "Visible redirect (301, permanent). Everybody will be able to access it.",
-                  "public_proxy": "Proxy, invisible (nginx proxy_pass). Everybody will be able to access it.",
-                  "private_proxy": "Proxy, invisible (nginx proxy_pass). Only accessible for allowed users."
+                  "public_302": "Visible redirect (302, temporary). Everybody will be able to access it.",
+                  "public_301": "Visible redirect (301, permanent). Everybody will be able to access it.",
+                  "public_proxy": "Proxy, invisible (NGINX proxy_pass). Everybody will be able to access it.",
+                  "private_proxy": "Proxy, invisible (NGINX proxy_pass). Only accessible for allowed users."
                 },
                 "default": "public_302"
             }

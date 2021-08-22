@@ -22,7 +22,7 @@ ynh_print_info --message="Loading installation settings..."
 
 # Retrieve arguments
 app=$YNH_APP_INSTANCE_NAME
-domain=$(ynh_app_setting_get $app domain)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
 
 #=================================================
 # BACKUP THE NGINX CONFIGURATION

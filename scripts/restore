@@ -21,10 +21,10 @@ ynh_abort_if_errors
 
 # Retrieve arguments
 app=$YNH_APP_INSTANCE_NAME
-domain=$(ynh_app_setting_get "$app" domain)
-path_url=$(ynh_app_setting_get "$app" path)
-redirect_type=$(ynh_app_setting_get "$app" redirect_type)
-redirect_path=$(ynh_app_setting_get "$app" redirect_path)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
+redirect_type=$(ynh_app_setting_get --app=$app --key=redirect_type)
+redirect_path=$(ynh_app_setting_get --app=$app --key=redirect_path)
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
@@ -41,10 +41,6 @@ ynh_restore_file "$NGINX_CONF"
 # SETUP SSOWAT
 #=================================================
 
-if [[ "$is_public" -eq 0 ]]
-then	# Remove the public access
-	ynh_app_setting_delete "$app" skipped_uris
-fi
 # Make app public if necessary
 if [ "$redirect_type" != "private_proxy" ]
 then

@@ -2,7 +2,7 @@
 
 It could be an invisible redirect, an external link, another app on your local network, a reverse proxy to an app or a Docker container... Some apps can be even be protected behind your panel (meaning that you will have to log-in to access them). The only limit is your imagination - and NGINX ;).
 
-This app only adds a Nginx configuration file with `redirect` or `proxy_pass` rule, and a YunoHost tile. Nothing more.
+This app only adds a NGINX configuration file with `redirect` or `proxy_pass` rule, and a YunoHost tile. Nothing more.
 
 ## Redirect type
 
