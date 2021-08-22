@@ -19,55 +19,55 @@ Créer une redirection ou un proxy vers un autre emplacement
 
 ## Avertissements / informations importantes
 
-**Add a link on your user panel redirecting to another page or app, which can be protected behind your panel for some**.
+**Ajoutez un lien sur votre panneau d'utilisateur redirigeant vers une autre page ou application, qui peut être protégée derrière votre panneau pour certains**.
 
-It could be an invisible redirect, an external link, another app on your local network, a reverse proxy to an app or a Docker container... Some apps can be even be protected behind your panel (meaning that you will have to log-in to access them). The only limit is your imagination - and NGINX ;).
+Il peut s'agir d'une redirection invisible, d'un lien externe, d'une autre application sur votre réseau local, d'un reverse proxy vers une application ou un conteneur Docker... Certaines applications peuvent même être protégées derrière votre panneau (ce qui signifie que vous devrez vous connecter- pour y accéder). La seule limite est votre imagination - et NGINX ;).
 
-This app only adds a Nginx configuration file with `redirect` or `proxy_pass` rule, and a YunoHost tile. Nothing more.
+Cette application ajoute uniquement un fichier de configuration NGINX avec la règle `redirect` ou `proxy_pass` et une tuile YunoHost. Rien de plus.
 
-## Redirect type
+## Type de redirection
 
-### Visible redirect
+### Redirection visible
 
-Visitor's address bar will change. Helpfull to add a user link to another website
+La barre d'adresse du visiteur va changer. Utile pour ajouter un lien utilisateur vers un autre site Web
 
-    you-domain.com -> another-domain.net
-    you-domain.com/foo -> another-domain.net/bar
+    votre-domaine.com -> autre-domaine.net
+    vous-domaine.com/foo -> autre-domaine.net/bar
 
-### Invisible (proxy) redirect
+### Redirection invisible (proxy)
 
-Visitor's address bar will remain the same. Mostly use to serve local webserver for a personnal application.
+La barre d'adresse du visiteur restera la même. Principalement utilisé pour servir le serveur Web local pour une application personnelle.
     
-    you-domain.com/foo -> http://172.0.0.1:8080/app
+    vous-domaine.com/foo -> http://172.0.0.1:8080/app
 
-**IMPORTANT:** the `redirect.conf` file might need to be updated according to your situation!
+**IMPORTANT :** le fichier `redirect.conf` devra peut-être être mis à jour en fonction de votre situation !
 
-**WARNING:** Many apps do not support being redirected to a different path due to relative links! This means that some apps being hosted for example on http://127.0.0.1:5050/app/ HAVE TO be redirected to http://domain.tld/app/ and NOT http://domain.tld/someotherapp/
+**AVERTISSEMENT :** De nombreuses applications ne prennent pas en charge la redirection vers un chemin différent en raison de liens relatifs ! Cela signifie que certaines applications hébergées par exemple sur http://127.0.0.1:5050/app/ DOIVENT être redirigées vers http://domain.tld/app/ et NON vers http://domain.tld/someotherapp/
 
-*Concrete example:* the Odoo Docker container runs on http://127.0.0.1:8069/. You will not be able to redirect it to http://domain.tld/odoo/ ! You have to redirect it to the root, so for example http://odoo.domain.tld/
+*Exemple concret :* le conteneur Odoo Docker fonctionne sur http://127.0.0.1:8069/. Vous ne pourrez pas le rediriger vers http://domain.tld/odoo/ ! Il faut le rediriger vers la racine, donc par exemple http://odoo.domain.tld/
 
-## Public or private redirect
+## Redirection publique ou privée
 
-In case of a private redirect, the app will be available to logged in users only. This could be useful if you want to protect behind the SSO an app from your local network or from the server (e.g., a Docker container or an app that does not have user management or password protection).
+En cas de redirection privée, l'application sera disponible uniquement pour les utilisateurs connectés. Cela peut être utile si vous souhaitez protéger derrière le SSO une application de votre réseau local ou du serveur (par exemple, un conteneur Docker ou une application qui n'a pas de gestion des utilisateurs ou de protection par mot de passe).
 
-**IMPORTANT:** Make sure that the app you want to protect CANNOT be accessed by its port or another direct link. Otherwise, your app will only be protected in YunoHost but would still be available through its direct link. In the case of a Docker container, the port of the container will have to be local (e.g., -p 127.0.0.1:9000:9000).
+**IMPORTANT :** Assurez-vous que l'application que vous souhaitez protéger NE PEUT PAS être accessible via son port ou un autre lien direct. Sinon, votre application ne sera protégée que dans YunoHost mais sera toujours disponible via son lien direct. Dans le cas d'un conteneur Docker, le port du conteneur devra être local (par exemple, -p 127.0.0.1:9000:9000).
 
-## Case examples
+## Exemples de cas
 
-- **Creating a tile for a Docker container** with a local port (e.g., -p 127.0.0.1:PORT:PORT): proxy redirect to http://127.0.0.1:PORT-OF-THE-CONTAINER/
+- **Création d'une tuile pour un conteneur Docker** avec un port local (par exemple, -p 127.0.0.1:PORT:PORT) : redirection proxy vers http://127.0.0.1:PORT-OF-THE-CONTAINER/
 
-- **Redirecting to an external website**: visible redirect to the URL
+- **Redirection vers un site externe** : redirection visible vers l'URL
 
-- [CozyCloud behind YunoHost?](https://forum.cozy.io/t/cozy-cloud-sous-yunohost/616/11)
+- [CozyCloud derrière YunoHost ?](https://forum.cozy.io/t/cozy-cloud-sous-yunohost/616/11)
 
-- **Creating a tile and protecting apps that are difficult to package natively (or for prototyping)**
+- **Créer une vignette et protéger les applications difficiles à packager nativement (ou pour le prototypage)**
 
 
-**_Feel free to [share your case examples and customized Nginx files on the forum](https://forum.yunohost.org/t/2182)._**
+**_N'hésitez pas à [partager vos exemples de cas et vos fichiers Nginx personnalisés sur le forum](https://forum.yunohost.org/t/2182)._**
 
-## Credits
+## Crédits
 
-Insprired by [scith](https://github.com/scith) work.
+Inspiré du travail de [scith](https://github.com/scith). 
 
 ## Documentations et ressources
 
