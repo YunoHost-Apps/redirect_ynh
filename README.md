@@ -15,7 +15,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 ## Overview
 
-Create a redirection or a proxy to another path.
+Create a redirection or a proxy to another path
 
 **Shipped version:** 1.0.0~ynh5
 
@@ -27,7 +27,7 @@ Create a redirection or a proxy to another path.
 
 It could be an invisible redirect, an external link, another app on your local network, a reverse proxy to an app or a Docker container... Some apps can be even be protected behind your panel (meaning that you will have to log-in to access them). The only limit is your imagination - and NGINX ;).
 
-This app only adds a Nginx configuration file with `redirect` or `proxy_pass` rule, and a YunoHost tile. Nothing more.
+This app only adds a NGINX configuration file with `redirect` or `proxy_pass` rule, and a YunoHost tile. Nothing more.
 
 ## Redirect type
 
