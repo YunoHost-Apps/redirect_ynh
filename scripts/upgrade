@@ -65,6 +65,13 @@ then
     ynh_app_setting_set $app 'is_public'
 fi
 
+# Migrate legacy permissions to new system
+if ynh_legacy_permissions_exists
+then
+    ynh_legacy_permissions_delete_all
+
+    ynh_app_setting_delete --app=$app --key=is_public
+fi
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
