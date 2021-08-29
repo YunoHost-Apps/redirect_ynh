@@ -11,7 +11,12 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 ## Vue d'ensemble
 
-Créer une redirection ou un proxy vers un autre emplacement
+Cette application permet d'intégrée une tuile personalisée dans le portail utilisateur de YunoHost. Les cas d'usage typiques sont:
+- **redirection 301/302 visible** : avoir une tuile d'app "virtuelle" qui se contente de rediriger vers une autre url ou un site externe
+- **redirection invisible / reverse-proxy** : créer une tuile pour une application locale écoutant sur un port précis, ou bien un conteneur Docker, ou encore une app hébergée sur une autre machine
+
+En terme technique: cette app se contente de rajouter le morceau de configuration NGINX approprié avec soit `redirect` ou `proxy_pass`, et la tuile YunoHost + configuration SSOwat correspondante.
+
 
 **Version incluse :** 1.0.0~ynh5
 
@@ -19,55 +24,24 @@ Créer une redirection ou un proxy vers un autre emplacement
 
 ## Avertissements / informations importantes
 
-**Ajoutez un lien sur votre panneau d'utilisateur redirigeant vers une autre page ou application, qui peut être protégée derrière votre panneau pour certains**.
-
-Il peut s'agir d'une redirection invisible, d'un lien externe, d'une autre application sur votre réseau local, d'un reverse proxy vers une application ou un conteneur Docker... Certaines applications peuvent même être protégées derrière votre panneau (ce qui signifie que vous devrez vous connecter- pour y accéder). La seule limite est votre imagination - et NGINX ;).
-
-Cette application ajoute uniquement un fichier de configuration NGINX avec la règle `redirect` ou `proxy_pass` et une tuile YunoHost. Rien de plus.
-
-## Type de redirection
+## Types de redirection
 
 ### Redirection visible
 
-La barre d'adresse du visiteur va changer. Utile pour ajouter un lien utilisateur vers un autre site Web
+Le client sera redirigé vers une autre URL ou site externe
 
-    votre-domaine.com -> autre-domaine.net
-    vous-domaine.com/foo -> autre-domaine.net/bar
+- `votre-domaine.com -> un-autre-domaine.net`
+- `votre-domaine.com/foo -> un-autre-domaine.net/bar`
 
-### Redirection invisible (proxy)
+### Redirection invisible (a.k.a "reverse-proxy")
 
-La barre d'adresse du visiteur restera la même. Principalement utilisé pour servir le serveur Web local pour une application personnelle.
+L'adresse du client restera inchangé dans le navigateur. Typiquement utilisé pour intéger dans YunoHost une application installée manuellement.
     
-    vous-domaine.com/foo -> http://172.0.0.1:8080/app
+- `you-domain.com/foo -> http://172.0.0.1:8080/app`
 
-**IMPORTANT :** le fichier `redirect.conf` devra peut-être être mis à jour en fonction de votre situation !
+**IMPORTANT:** il vous faudra peut-être bricoler manuellement `redirect.conf` dans la configuration nginx, en fonction de vos besoins.
 
-**AVERTISSEMENT :** De nombreuses applications ne prennent pas en charge la redirection vers un chemin différent en raison de liens relatifs ! Cela signifie que certaines applications hébergées par exemple sur http://127.0.0.1:5050/app/ DOIVENT être redirigées vers http://domain.tld/app/ et NON vers http://domain.tld/someotherapp/
-
-*Exemple concret :* le conteneur Odoo Docker fonctionne sur http://127.0.0.1:8069/. Vous ne pourrez pas le rediriger vers http://domain.tld/odoo/ ! Il faut le rediriger vers la racine, donc par exemple http://odoo.domain.tld/
-
-## Redirection publique ou privée
-
-En cas de redirection privée, l'application sera disponible uniquement pour les utilisateurs connectés. Cela peut être utile si vous souhaitez protéger derrière le SSO une application de votre réseau local ou du serveur (par exemple, un conteneur Docker ou une application qui n'a pas de gestion des utilisateurs ou de protection par mot de passe).
-
-**IMPORTANT :** Assurez-vous que l'application que vous souhaitez protéger NE PEUT PAS être accessible via son port ou un autre lien direct. Sinon, votre application ne sera protégée que dans YunoHost mais sera toujours disponible via son lien direct. Dans le cas d'un conteneur Docker, le port du conteneur devra être local (par exemple, -p 127.0.0.1:9000:9000).
-
-## Exemples de cas
-
-- **Création d'une tuile pour un conteneur Docker** avec un port local (par exemple, -p 127.0.0.1:PORT:PORT) : redirection proxy vers http://127.0.0.1:PORT-OF-THE-CONTAINER/
-
-- **Redirection vers un site externe** : redirection visible vers l'URL
-
-- [CozyCloud derrière YunoHost ?](https://forum.cozy.io/t/cozy-cloud-sous-yunohost/616/11)
-
-- **Créer une vignette et protéger les applications difficiles à packager nativement (ou pour le prototypage)**
-
-
-**_N'hésitez pas à [partager vos exemples de cas et vos fichiers Nginx personnalisés sur le forum](https://forum.yunohost.org/t/2182)._**
-
-## Crédits
-
-Inspiré du travail de [scith](https://github.com/scith). 
+**IMPORTANT:** Certaines apps ne supportent pas d'être redirigées depuis un chemin différent à cause du fonctionnement des liens relatifs ... Cela signifie que par exemple une app hébergée sur `http://127.0.0.1:5050/app/` DOIT être routé sur `http://domaine.tld/app/` et PAS http://domaine.tld/unautrechemin/. Par exemple: un conteneur Docker Odoo tourne sur `http://127.0.0.1:8069/`. Il ne sera pas capable de fonctionné correctement si il est routé sur `http://domaine.tld/odoo/` ! Il faut forcément l'installer à la racine d'un domaine, par exemple `http://odoo.domaine.tld/`
 
 ## Documentations et ressources
 
