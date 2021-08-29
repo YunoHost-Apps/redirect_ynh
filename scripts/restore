@@ -21,10 +21,10 @@ ynh_abort_if_errors
 
 # Retrieve arguments
 app=$YNH_APP_INSTANCE_NAME
-domain=$(ynh_app_setting_get "$app" domain)
-path_url=$(ynh_app_setting_get "$app" path)
-redirect_type=$(ynh_app_setting_get "$app" redirect_type)
-redirect_path=$(ynh_app_setting_get "$app" redirect_path)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
+redirect_type=$(ynh_app_setting_get --app=$app --key=redirect_type)
+redirect_path=$(ynh_app_setting_get --app=$app --key=redirect_path)
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
@@ -38,15 +38,25 @@ NGINX_CONF="/etc/nginx/conf.d/${domain}.d/${app}.conf"
 ynh_restore_file "$NGINX_CONF"
 
 #=================================================
-# CONFIGURE SSOWAT
+# SETUP SSOWAT
 #=================================================
 
 # Make app public if necessary
 if [ "$redirect_type" != "private_proxy" ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set "$app" unprotected_uris "/"
+	ynh_permission_update --permission="main" --add="visitors"
 fi
 
-# Reload Nginx and regenerate SSOwat conf
-systemctl reload nginx
+#=================================================
+# RELOAD NGINX AND PHP-FPM
+#=================================================
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
+
+ynh_systemd_action --service_name=nginx --action=reload
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Restoration completed for $app" --last

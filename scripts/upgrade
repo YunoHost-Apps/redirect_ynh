@@ -15,10 +15,10 @@ source /usr/share/yunohost/helpers
 
 # Retrieve arguments
 app=$YNH_APP_INSTANCE_NAME
-domain=$(ynh_app_setting_get "$app" domain)
-path_url=$(ynh_app_setting_get "$app" path)
-redirect_type=$(ynh_app_setting_get "$app" redirect_type)
-redirect_path=$(ynh_app_setting_get "$app" redirect_path)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
+redirect_type=$(ynh_app_setting_get --app=$app --key=redirect_type)
+redirect_path=$(ynh_app_setting_get --app=$app --key=redirect_path)
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -43,7 +43,7 @@ then
     fi
 
     if [ "$is_public" = "0" ] && [ "$redirect_type" != "proxy" ]; then
-       echo "WARNING: You previously had a 'supposedly' private 301 or 302 redirection ... but it was found that it was public all along and it is not easy to create such a private redirection. Your 301 or 302 redirection will be re-flagged as public..." >&2
+       echo "WARNING: You previously had a 'supposedly' private 301 or 302 redirection... but it was found that it was public all along and it is not easy to create such a private redirection. Your 301 or 302 redirection will be re-flagged as public..." >&2
        is_public=1
     fi
 
@@ -65,6 +65,13 @@ then
     ynh_app_setting_set $app 'is_public'
 fi
 
+# Migrate legacy permissions to new system
+if ynh_legacy_permissions_exists
+then
+    ynh_legacy_permissions_delete_all
+
+    ynh_app_setting_delete --app=$app --key=is_public
+fi
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
@@ -114,8 +121,18 @@ fi
 if [ "$redirect_type" != "private_proxy" ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set "$app" unprotected_uris "/"
+	ynh_permission_update --permission="main" --add="visitors"
 fi
 
-# Reload Nginx and regenerate SSOwat conf
-systemctl reload nginx
+#=================================================
+# RELOAD NGINX
+#=================================================
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
+
+ynh_systemd_action --service_name=nginx --action=reload
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Upgrade of $app completed" --last

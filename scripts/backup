@@ -18,10 +18,21 @@ ynh_abort_if_errors
 #=================================================
 # LOAD SETTINGS
 #=================================================
+ynh_print_info --message="Loading installation settings..."
 
 # Retrieve arguments
 app=$YNH_APP_INSTANCE_NAME
-domain=$(ynh_app_setting_get $app domain)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+
+#=================================================
+# BACKUP THE NGINX CONFIGURATION
+#=================================================
 
 # Copy the conf files
 ynh_backup "/etc/nginx/conf.d/${domain}.d/${app}.conf"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_print_info --message="Backup script completed for $app. (YunoHost will then actually copy those files to the archive)."
