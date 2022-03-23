@@ -6,7 +6,7 @@
         "en": "Create a redirection or a proxy to another path",
         "fr": "Créer une redirection ou un proxy vers un autre emplacement"
     },
-    "version": "1.0.0~ynh5",
+    "version": "1.0.1~ynh1",
     "license": "AGPL-3.0-or-later",
     "url": "https://github.com/YunoHost-Apps/redirect_ynh",
     "upstream": {
