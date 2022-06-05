@@ -5,7 +5,7 @@ It shall NOT be edited by hand.
 
 # Redirect for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/redirect.svg)](https://dash.yunohost.org/appci/app/redirect) ![](https://ci-apps.yunohost.org/ci/badges/redirect.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/redirect.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/redirect.svg)](https://dash.yunohost.org/appci/app/redirect) ![Working status](https://ci-apps.yunohost.org/ci/badges/redirect.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/redirect.maintain.svg)  
 [![Install Redirect with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=redirect)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -23,9 +23,6 @@ In technical terms: this app only adds a NGINX configuration snippet with either
 
 
 **Shipped version:** 1.0.1~ynh1
-
-
-
 ## Disclaimers / important information
 
 ## Redirect type
@@ -49,19 +46,20 @@ Visitor's address bar will remain the same. Typically used to integrate into Yun
 
 ## Documentation and resources
 
-* Official app website: https://github.com/YunoHost-Apps/redirect_ynh
-* YunoHost documentation for this app: https://yunohost.org/app_redirect
-* Report a bug: https://github.com/YunoHost-Apps/redirect_ynh/issues
+* Official app website: <https://github.com/YunoHost-Apps/redirect_ynh>
+* YunoHost documentation for this app: <https://yunohost.org/app_redirect>
+* Report a bug: <https://github.com/YunoHost-Apps/redirect_ynh/issues>
 
 ## Developer info
 
 Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/redirect_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
-```
+
+``` bash
 sudo yunohost app install https://github.com/YunoHost-Apps/redirect_ynh/tree/testing --debug
 or
 sudo yunohost app upgrade redirect -u https://github.com/YunoHost-Apps/redirect_ynh/tree/testing --debug
 ```
 
-**More info regarding app packaging:** https://yunohost.org/packaging_apps
+**More info regarding app packaging:** <https://yunohost.org/packaging_apps>
