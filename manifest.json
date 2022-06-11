@@ -28,7 +28,7 @@
         "install" : [
             {
                 "name": "domain",
-                "type": "domain",
+                "type": "domain"
             },
             {
                 "name": "path",
