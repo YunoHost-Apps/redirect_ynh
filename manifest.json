@@ -29,7 +29,6 @@
             {
                 "name": "domain",
                 "type": "domain",
-                "example": "domain.org"
             },
             {
                 "name": "path",
@@ -68,7 +67,8 @@
                 "name": "is_public",
                 "type": "boolean",
                 "default": true,
-                "visible": "redirect_type == 'proxy'"
+                "visible": "redirect_type == 'proxy'",
+                "help": "You can manage public or private mode only with the proxy mode."
             }
         ]
     }

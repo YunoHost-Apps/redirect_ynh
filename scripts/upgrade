@@ -126,17 +126,13 @@ ynh_add_nginx_config
 # CONFIGURE SSOWAT
 #=================================================
 
-# Make app public if necessary
-if [ $is_public -eq 1 ]
+# Everyone can access the app.
+# The "main" permission is automatically created before the install script.
+if [[ $redirect_type != "proxy" ]]
 then
-	# Everyone can access the app.
-	# The "main" permission is automatically created before the install script.
-    if [[ $redirect_type != "proxy" ]]
-    then
-	    ynh_permission_update --permission="main" --add="visitors" --protected=1
-    else
-	    ynh_permission_update --permission="main" --add="visitors" --protected=0
-    fi
+    ynh_permission_update --permission="main" --add="visitors" --protected=1
+else
+    ynh_permission_update --permission="main" --protected=0
 fi
 
 #=================================================

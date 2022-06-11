@@ -27,7 +27,6 @@ redirect_type=$(ynh_app_setting_get --app=$app --key=redirect_type)
 redirect_path=$(ynh_app_setting_get --app=$app --key=redirect_path)
 frame_ancestors=$(ynh_app_setting_get --app=$app --key=frame_ancestors)
 client_max_body_size=$(ynh_app_setting_get --app=$app --key=client_max_body_size)
-is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
@@ -39,23 +38,6 @@ NGINX_CONF="/etc/nginx/conf.d/${domain}.d/${app}.conf"
 
 # Restore configuration files
 ynh_restore_file "$NGINX_CONF"
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-
-# Make app public if necessary
-if [ $is_public -eq 1 ]
-then
-	# Everyone can access the app.
-	# The "main" permission is automatically created before the install script.
-    if [[ $redirect_type != "proxy" ]]
-    then
-	    ynh_permission_update --permission="main" --add="visitors" --protected=1
-    else
-	    ynh_permission_update --permission="main" --add="visitors"
-    fi
-fi
 
 #=================================================
 # RELOAD NGINX AND PHP-FPM

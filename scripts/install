@@ -25,7 +25,7 @@ domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 redirect_type=$YNH_APP_ARG_REDIRECT_TYPE
 redirect_path=$YNH_APP_ARG_REDIRECT_PATH
-is_public=$YNH_APP_ARG_IS_PUBLIC
+is_public=${YNH_APP_ARG_IS_PUBLIC:-1}
 propagate_subpath=$(echo $YNH_APP_ARG_REDIRECT_TYPE | grep -q subpath && echo 1 || echo 0)
 frame_ancestors="'none'"
 client_max_body_size="1m"
@@ -62,7 +62,6 @@ ynh_script_progression --message="Storing installation settings..." --weight=1
 # Save extra settings
 ynh_app_setting_set --app=$app --key=redirect_type --value=$redirect_type
 ynh_app_setting_set --app=$app --key=redirect_path --value=$redirect_path
-ynh_app_setting_set --app=$app --key=is_public --value=$is_public
 ynh_app_setting_set --app=$app --key=frame_ancestors --value="'none'"
 ynh_app_setting_set --app=$app --key=client_max_body_size --value="1m"
 
