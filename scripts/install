@@ -25,9 +25,15 @@ domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 redirect_type=$YNH_APP_ARG_REDIRECT_TYPE
 redirect_path=$YNH_APP_ARG_REDIRECT_PATH
+is_public=$YNH_APP_ARG_IS_PUBLIC
+propagate_subpath=$(echo $YNH_APP_ARG_REDIRECT_TYPE | grep -q subpath && echo 1 || echo 0)
+frame_ancestors="'none'"
+client_max_body_size="1m"
 
-# Check domain/path availability
-ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
+#=================================================
+# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
+#=================================================
+ynh_script_progression --message="Validating installation parameters..." --weight=1
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
@@ -39,44 +45,60 @@ url_regex='^(http://(127\.[0-9]+\.[0-9]+\.[0-9]+|localhost)|https://.*)(:[0-9]+)
 [[ "$redirect_type" = "proxy" ]] && [[ ! $redirect_path =~ $url_regex ]] && ynh_die \
 "For secure reason, you can't use an unencrypted http remote destination couple with ssowat for your reverse proxy: $redirect_path" 1
 
+if [ $is_public -eq 0 ] && [[ $redirect_type != "proxy" ]]
+then
+    is_public=1
+    YNH_APP_ARG_IS_PUBLIC=1
+    ynh_warn "HTTP private redirection are not supported. Your redirection has been reflagged as public."
+fi
+# Register (book) web path
+ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
+
+#=================================================
+# STORE SETTINGS FROM MANIFEST
+#=================================================
+ynh_script_progression --message="Storing installation settings..." --weight=1
+
 # Save extra settings
 ynh_app_setting_set --app=$app --key=redirect_type --value=$redirect_type
 ynh_app_setting_set --app=$app --key=redirect_path --value=$redirect_path
+ynh_app_setting_set --app=$app --key=is_public --value=$is_public
+ynh_app_setting_set --app=$app --key=frame_ancestors --value="'none'"
+ynh_app_setting_set --app=$app --key=client_max_body_size --value="1m"
 
 #=================================================
-# CONFIGURE NGINX
+# SPECIFIC SETUP
+#=================================================
+ynh_script_progression --message="Preparing NGINX web server configuration..." --weight=1
+
+cp ../conf/nginx-$redirect_type.conf ../conf/nginx.conf
+
+#=================================================
+
+#=================================================
+# NGINX CONFIGURATION
 #=================================================
 ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
-# Nginx configuration
-for FILE in $(ls ../conf/nginx-*.conf)
-do
-    ynh_replace_string "YNH_LOCATION" "$path_url" $FILE
-done
-if [ "$redirect_type" = "public_302" ];
-then
-    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-302.conf
-    cp ../conf/nginx-visible-302.conf /etc/nginx/conf.d/$domain.d/$app.conf
-elif [ "$redirect_type" = "public_301" ];
-then
-    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-301.conf
-    cp ../conf/nginx-visible-301.conf /etc/nginx/conf.d/$domain.d/$app.conf
-elif [ "$redirect_type" = "public_proxy" ] || [ "$redirect_type" = "private_proxy" ];
-then
-    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-proxy.conf
-    cp ../conf/nginx-proxy.conf /etc/nginx/conf.d/$domain.d/$app.conf
-fi
+# Create a dedicated NGINX config
+ynh_add_nginx_config
 
 #=================================================
-# CONFIGURE SSOWAT
+# SETUP SSOWAT
 #=================================================
-ynh_script_progression --message="Configuring permissions..." --weight=2
+ynh_script_progression --message="Configuring permissions..." --weight=1
 
 # Make app public if necessary
-if [ "$redirect_type" != "private_proxy" ]
+if [ $is_public -eq 1 ]
 then
-	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_permission_update --permission="main" --add="visitors"
+	# Everyone can access the app.
+	# The "main" permission is automatically created before the install script.
+    if [[ $redirect_type != "proxy" ]]
+    then
+	    ynh_permission_update --permission="main" --add="visitors" --protected=1
+    else
+	    ynh_permission_update --permission="main" --add="visitors"
+    fi
 fi
 
 #=================================================

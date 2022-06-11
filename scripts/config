@@ -1,0 +1,114 @@
+#!/bin/bash
+
+#=================================================
+# GENERIC STARTING
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source /usr/share/yunohost/helpers
+
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# SPECIFIC GETTERS FOR TOML SHORT KEY
+#=================================================
+
+get__client_max_body_size() {
+    grep -o -P "(?<=client_max_body_size )\d+[kmgt](?=;)" /etc/nginx/conf.d/$domain.d/$app.conf
+}
+
+get__frame_allowed() {
+    if grep -E -q "Content-Security-Policy: +frame-ancestors +'none' *;" /etc/nginx/conf.d/$domain.d/$app.conf
+    then
+        echo 0
+    else
+        echo 1
+    fi
+}
+
+get__frame_ancestors() {
+    if grep -E -q "Content-Security-Policy: +frame-ancestors +'none' *;" /etc/nginx/conf.d/$domain.d/$app.conf
+    then
+        grep -o -P "(?<=Content-security-Policy: frame-ancestors )[^;]+(?=;)" /etc/nginx/conf.d/$domain.d/$app.conf | sed "s/'none'//g" | xargs | sed -E "s/ /,/g"
+    fi
+}
+
+
+#=================================================
+# SPECIFIC VALIDATORS FOR TOML SHORT KEYS
+#=================================================
+validate__redirect_path() {
+    url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
+    if [[ ! $redirect_path =~ $url_regex ]]
+    then
+        echo "Invalid destination: $redirect_path"
+    fi
+
+    # Avoid uncrypted remote destination with reverse proxy mode
+    # Indeed the SSO send the password in all requests in HTTP headers
+    url_regex='^(http://(127\.[0-9]+\.[0-9]+\.[0-9]+|localhost)|https://.*)(:[0-9]+)?(/.*)?$'
+    if [[ "$redirect_type" = "proxy" ]] && [[ ! $redirect_path =~ $url_regex ]]
+    then
+        echo
+    "For secure reason, you can't use an unencrypted http remote destination couple with ssowat for your reverse proxy: $redirect_path"
+    fi
+}
+#=================================================
+# SPECIFIC SETTERS FOR TOML SHORT KEYS
+#=================================================
+set__domain() {
+    ynh_secure_remove /etc/nginx/conf.d/${old[domain]}.d/$app.conf
+}
+
+set__redirect_type() {
+    if [[ $redirect_type != "proxy" ]]
+    then
+	    ynh_permission_update --permission="main" --add="visitors" --protected=1
+        ynh_app_setting_set --app=$app --key=is_public --value=1
+    else
+	    ynh_permission_update --permission="main" --protected=0
+    fi
+    ynh_app_setting_set --app=$app --key=redirect_type --value="$redirect_type"
+}
+
+
+set__frame_allowed() {
+    if [[ $frame_allowed == "0" ]] 
+    then
+        frame_ancestors="'none'"
+    fi
+}
+
+set__frame_ancestors() {
+    if [[ $frame_allowed == "0" ]] 
+    then
+        frame_ancestors="'none'"
+    fi
+    frame_ancestors="${frame_ancestors//,/ }"
+    ynh_app_setting_set --app=$app --key=frame_ancestors --value="$frame_ancestors"
+}
+
+#=================================================
+# OVERWRITING APPLY STEP
+#=================================================
+ynh_app_config_apply() {
+
+    ynh_print_info --message="Override NGINX configuration"
+
+
+    _ynh_app_config_apply
+    
+    cp ../conf/nginx-$redirect_type.conf ../conf/nginx.conf
+    # Create a dedicated NGINX config
+    ynh_add_nginx_config
+
+
+}
+
+ynh_app_config_run $1

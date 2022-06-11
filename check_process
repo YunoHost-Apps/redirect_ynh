@@ -4,6 +4,7 @@
 		path="/path"
 		redirect_type="public_302"
 		redirect_path="http://127.0.0.1"
+        is_public=1
 	; Checks
 		pkg_linter=1
 		setup_sub_dir=1

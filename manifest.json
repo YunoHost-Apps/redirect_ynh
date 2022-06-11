@@ -6,7 +6,7 @@
         "en": "Create a redirection or a proxy to another path",
         "fr": "Créer une redirection ou un proxy vers un autre emplacement"
     },
-    "version": "1.0.1~ynh1",
+    "version": "1.0.2~ynh1",
     "license": "AGPL-3.0-or-later",
     "url": "https://github.com/YunoHost-Apps/redirect_ynh",
     "upstream": {
@@ -55,12 +55,20 @@
                     "fr": "Type de redirection"
                 },
                 "choices": {
-                  "public_302": "Visible redirect (302, temporary). Everybody will be able to access it.",
-                  "public_301": "Visible redirect (301, permanent). Everybody will be able to access it.",
-                  "public_proxy": "Proxy, invisible (NGINX proxy_pass). Everybody will be able to access it.",
-                  "private_proxy": "Proxy, invisible (NGINX proxy_pass). Only accessible for allowed users."
+                  "public_302": "Visible redirect (302, temporary).",
+                  "public_302_subpath": "Visible redirect (302, temporary) + subpaths are propagated.",
+                  "public_301": "Visible redirect (301, permanent).",
+                  "public_301_subpath": "Visible redirect (301, permanent) + subpaths are propagated.",
+                  "proxy": "Proxy, invisible (NGINX proxy_pass)."
                 },
-                "default": "public_302"
+                "default": "public_302_subpath",
+                "help": "Subpaths are propagated = transfer the subpath into the redirection. So if you redirect www.example.com to example.com, request https://www.example.com/foo/bar will redirect onto https://example.com/foo/bar instead of https://example.com"
+            },
+            {
+                "name": "is_public",
+                "type": "boolean",
+                "default": true,
+                "visible": "redirect_type == 'proxy'"
             }
         ]
     }
