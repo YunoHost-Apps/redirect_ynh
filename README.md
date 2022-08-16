@@ -23,6 +23,7 @@ In technical terms: this app only adds a NGINX configuration snippet with either
 
 
 **Shipped version:** 1.0.1~ynh1
+
 ## Disclaimers / important information
 
 ## Redirect type
