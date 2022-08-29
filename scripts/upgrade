@@ -62,7 +62,6 @@ then
     fi
     
     ynh_app_setting_set $app 'redirect_type' $redirect_type
-    ynh_app_setting_set $app 'is_public'
 fi
 
 # Migrate legacy permissions to new system
