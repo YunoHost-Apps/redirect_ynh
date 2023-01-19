@@ -23,7 +23,6 @@ In technical terms: this app only adds a NGINX configuration snippet with either
 
 
 **Shipped version:** 1.0.2~ynh1
-
 ## Disclaimers / important information
 
 ## Redirect type
@@ -47,7 +46,7 @@ Visitor's address bar will remain the same. Typically used to integrate into Yun
 
 ## Documentation and resources
 
-* Official app website: <https://github.com/YunoHost-Apps/redirect_ynh>
+* Upstream app code repository: <https://github.com/YunoHost-Apps/redirect_ynh>
 * YunoHost documentation for this app: <https://yunohost.org/app_redirect>
 * Report a bug: <https://github.com/YunoHost-Apps/redirect_ynh/issues>
 
