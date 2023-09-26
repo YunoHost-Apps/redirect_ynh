@@ -5,7 +5,8 @@ It shall NOT be edited by hand.
 
 # Redirect pour YunoHost
 
-[![Niveau d’intégration](https://dash.yunohost.org/integration/redirect.svg)](https://dash.yunohost.org/appci/app/redirect) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/redirect.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/redirect.maintain.svg)  
+[![Niveau d’intégration](https://dash.yunohost.org/integration/redirect.svg)](https://dash.yunohost.org/appci/app/redirect) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/redirect.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/redirect.maintain.svg)
+
 [![Installer Redirect avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=redirect)
 
 *[Read this readme in english.](./README.md)*
