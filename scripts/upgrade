@@ -10,17 +10,6 @@
 source /usr/share/yunohost/helpers
 
 #=================================================
-# LOAD SETTINGS
-#=================================================
-
-# Retrieve arguments
-#REMOVEME? app=$YNH_APP_INSTANCE_NAME
-#REMOVEME? domain=$(ynh_app_setting_get --app=$app --key=domain)
-#REMOVEME? path=$(ynh_app_setting_get --app=$app --key=path)
-#REMOVEME? redirect_type=$(ynh_app_setting_get --app=$app --key=redirect_type)
-#REMOVEME? redirect_path=$(ynh_app_setting_get --app=$app --key=redirect_path)
-
-#=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
 
@@ -33,24 +22,25 @@ then
 fi
 
 # Migrate away from old stuff with 'is_public' and old redirect type names
-#REMOVEME? #REMOVEME? is_public=$(ynh_app_setting_get "$app" is_public)
-#REMOVEME? if [ -n "$is_public" ]
+is_public=$(ynh_app_setting_get "$app" is_public)
+
+if [ -n "$is_public" ]
 then
-#REMOVEME?     if [ "$is_public" = "Yes" ]; then
+     if [ "$is_public" = "Yes" ]; then
         is_public=1
-#REMOVEME?     elif [ "$is_public" = "No" ]; then
+     elif [ "$is_public" = "No" ]; then
         is_public=0
     fi
 
-#REMOVEME?     if [ "$is_public" = "0" ] && [ "$redirect_type" != "proxy" ]; then
+    if [ "$is_public" = "0" ] && [ "$redirect_type" != "proxy" ]; then
        echo "WARNING: You previously had a 'supposedly' private 301 or 302 redirection... but it was found that it was public all along and it is not easy to create such a private redirection. Your 301 or 302 redirection will be re-flagged as public..." >&2
        is_public=1
     fi
 
-#REMOVEME?     if [ "$redirect_type" == "proxy" ] && [ "$is_public" = "1" ]
+if [ "$redirect_type" == "proxy" ] && [ "$is_public" = "1" ]
     then
         redirect_type="public_proxy"
-#REMOVEME?     elif [ "$redirect_type" == "proxy" ] && [ "$is_public" = "0" ]
+    elif [ "$redirect_type" == "proxy" ] && [ "$is_public" = "0" ]
     then
         redirect_type="private_proxy"
     elif [ "$redirect_type" == "visible_302" ]
@@ -64,26 +54,9 @@ then
     ynh_app_setting_set $app 'redirect_type' $redirect_type
 fi
 
-# Migrate legacy permissions to new system
-#REMOVEME? if ynh_legacy_permissions_exists
-then
-#REMOVEME?     ynh_legacy_permissions_delete_all
-
-    ynh_app_setting_delete --app=$app --key=is_public
-fi
-
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-
-# Backup the current version of the app
-#REMOVEME? ynh_backup_before_upgrade
-#REMOVEME? ynh_clean_setup () {
-	# restore it if the upgrade fails
-#REMOVEME? 	ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-#REMOVEME? ynh_abort_if_errors
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
@@ -120,15 +93,8 @@ fi
 if [ "$redirect_type" != "private_proxy" ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway.
-#REMOVEME? 	ynh_permission_update --permission="main" --add="visitors"
+    ynh_permission_update --permission="main" --add="visitors"
 fi
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-#REMOVEME? ynh_script_progression --message="Reloading NGINX web server..." --weight=1
-
-#REMOVEME? ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
