@@ -1,0 +1,10 @@
+test_format = 1.0
+
+[default]
+
+    # -------------------------------
+    # Default args to use for install
+    # -------------------------------
+
+    args.redirect_type = "public_302"
+    args.redirect_path = "http://127.0.0.1"

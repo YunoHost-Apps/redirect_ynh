@@ -9,22 +9,11 @@
 source /usr/share/yunohost/helpers
 
 #=================================================
-# MANAGE SCRIPT FAILURE
-#=================================================
-
-# Exit if an error occurs during the execution of the script
-#REMOVEME? ynh_abort_if_errors
-
-#=================================================
 # LOAD SETTINGS
 #=================================================
 
-# Retrieve arguments
-#REMOVEME? app=$YNH_APP_INSTANCE_NAME
-#REMOVEME? domain=$(ynh_app_setting_get --app=$app --key=domain)
-#REMOVEME? path=$(ynh_app_setting_get --app=$app --key=path)
-#REMOVEME? redirect_type=$(ynh_app_setting_get --app=$app --key=redirect_type)
-#REMOVEME? redirect_path=$(ynh_app_setting_get --app=$app --key=redirect_path)
+redirect_type=$(ynh_app_setting_get --app=$app --key=redirect_type)
+redirect_path=$(ynh_app_setting_get --app=$app --key=redirect_path)
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
@@ -45,7 +34,7 @@ ynh_restore_file "$NGINX_CONF"
 if [ "$redirect_type" != "private_proxy" ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway.
-#REMOVEME? 	ynh_permission_update --permission="main" --add="visitors"
+	ynh_permission_update --permission="main" --add="visitors"
 fi
 
 #=================================================

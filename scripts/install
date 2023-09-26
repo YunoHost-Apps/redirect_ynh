@@ -9,25 +9,11 @@
 source /usr/share/yunohost/helpers
 
 #=================================================
-# MANAGE SCRIPT FAILURE
-#=================================================
-
-# Exit if an error occurs during the execution of the script
-#REMOVEME? ynh_abort_if_errors
-
-#=================================================
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-# Retrieve arguments
-#REMOVEME? app=$YNH_APP_INSTANCE_NAME
-#REMOVEME? domain=$YNH_APP_ARG_DOMAIN
-#REMOVEME? path=$YNH_APP_ARG_PATH
-#REMOVEME? redirect_type=$YNH_APP_ARG_REDIRECT_TYPE
-#REMOVEME? redirect_path=$YNH_APP_ARG_REDIRECT_PATH
-
-# Check domain/path availability
-#REMOVEME? ynh_webpath_register --app=$app --domain=$domain --path=$path
+redirect_type=$YNH_APP_ARG_REDIRECT_TYPE
+redirect_path=$YNH_APP_ARG_REDIRECT_PATH
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
@@ -39,9 +25,9 @@ url_regex='^(http://(127\.[0-9]+\.[0-9]+\.[0-9]+|localhost)|https://.*)(:[0-9]+)
 [[ "$redirect_type" = "proxy" ]] && [[ ! $redirect_path =~ $url_regex ]] && ynh_die \
 "For secure reason, you can't use an unencrypted http remote destination couple with ssowat for your reverse proxy: $redirect_path" 1
 
-# Save extra settings
+# Save extra settings
 ynh_app_setting_set --app=$app --key=redirect_type --value=$redirect_type
-#REMOVEME? ynh_app_setting_set --app=$app --key=redirect_path --value=$redirect_path
+ynh_app_setting_set --app=$app --key=redirect_path --value=$redirect_path
 
 #=================================================
 # CONFIGURE NGINX
@@ -70,21 +56,14 @@ fi
 #=================================================
 # CONFIGURE SSOWAT
 #=================================================
-#REMOVEME? ynh_script_progression --message="Configuring permissions..." --weight=2
+ynh_script_progression --message="Configuring permissions..." --weight=2
 
 # Make app public if necessary
 if [ "$redirect_type" != "private_proxy" ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway.
-#REMOVEME? 	ynh_permission_update --permission="main" --add="visitors"
+    ynh_permission_update --permission="main" --add="visitors"
 fi
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-#REMOVEME? ynh_script_progression --message="Reloading NGINX web server..." --weight=1
-
-#REMOVEME? ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
