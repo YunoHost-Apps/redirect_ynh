@@ -11,11 +11,11 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
+#REMOVEME? ynh_script_progression --message="Loading installation settings..." --weight=1
 
 # Retrieve arguments
-app=$YNH_APP_INSTANCE_NAME
-domain=$(ynh_app_setting_get --app=$app --key=domain)
+#REMOVEME? app=$YNH_APP_INSTANCE_NAME
+#REMOVEME? domain=$(ynh_app_setting_get --app=$app --key=domain)
 
 #=================================================
 # REMOVE NGINX CONFIGURATION
@@ -27,9 +27,9 @@ ynh_secure_remove /etc/nginx/conf.d/$domain.d/$app.conf
 #=================================================
 # RELOAD NGINX AND PHP-FPM
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=1
+#REMOVEME? ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
-ynh_systemd_action --service_name=nginx --action=reload
+#REMOVEME? ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT

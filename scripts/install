@@ -13,21 +13,21 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 # Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+#REMOVEME? ynh_abort_if_errors
 
 #=================================================
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
 # Retrieve arguments
-app=$YNH_APP_INSTANCE_NAME
-domain=$YNH_APP_ARG_DOMAIN
-path_url=$YNH_APP_ARG_PATH
-redirect_type=$YNH_APP_ARG_REDIRECT_TYPE
-redirect_path=$YNH_APP_ARG_REDIRECT_PATH
+#REMOVEME? app=$YNH_APP_INSTANCE_NAME
+#REMOVEME? domain=$YNH_APP_ARG_DOMAIN
+#REMOVEME? path=$YNH_APP_ARG_PATH
+#REMOVEME? redirect_type=$YNH_APP_ARG_REDIRECT_TYPE
+#REMOVEME? redirect_path=$YNH_APP_ARG_REDIRECT_PATH
 
 # Check domain/path availability
-ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
+#REMOVEME? ynh_webpath_register --app=$app --domain=$domain --path=$path
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
@@ -41,7 +41,7 @@ url_regex='^(http://(127\.[0-9]+\.[0-9]+\.[0-9]+|localhost)|https://.*)(:[0-9]+)
 
 # Save extra settings
 ynh_app_setting_set --app=$app --key=redirect_type --value=$redirect_type
-ynh_app_setting_set --app=$app --key=redirect_path --value=$redirect_path
+#REMOVEME? ynh_app_setting_set --app=$app --key=redirect_path --value=$redirect_path
 
 #=================================================
 # CONFIGURE NGINX
@@ -51,7 +51,7 @@ ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 # Nginx configuration
 for FILE in $(ls ../conf/nginx-*.conf)
 do
-    ynh_replace_string "YNH_LOCATION" "$path_url" $FILE
+    ynh_replace_string "YNH_LOCATION" "$path" $FILE
 done
 if [ "$redirect_type" = "public_302" ];
 then
@@ -70,21 +70,21 @@ fi
 #=================================================
 # CONFIGURE SSOWAT
 #=================================================
-ynh_script_progression --message="Configuring permissions..." --weight=2
+#REMOVEME? ynh_script_progression --message="Configuring permissions..." --weight=2
 
 # Make app public if necessary
 if [ "$redirect_type" != "private_proxy" ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_permission_update --permission="main" --add="visitors"
+#REMOVEME? 	ynh_permission_update --permission="main" --add="visitors"
 fi
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=1
+#REMOVEME? ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
-ynh_systemd_action --service_name=nginx --action=reload
+#REMOVEME? ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
