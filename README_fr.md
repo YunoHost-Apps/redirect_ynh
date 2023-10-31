@@ -5,15 +5,16 @@ It shall NOT be edited by hand.
 
 # Redirect pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/redirect.svg)](https://dash.yunohost.org/appci/app/redirect) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/redirect.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/redirect.maintain.svg)  
+[![Niveau d’intégration](https://dash.yunohost.org/integration/redirect.svg)](https://dash.yunohost.org/appci/app/redirect) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/redirect.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/redirect.maintain.svg)
+
 [![Installer Redirect avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=redirect)
 
 *[Read this readme in english.](./README.md)*
 
-> *Ce package vous permet d'installer Redirect rapidement et simplement sur un serveur YunoHost.
-Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
+> *Ce package vous permet d’installer Redirect rapidement et simplement sur un serveur YunoHost.
+Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l’installer et en profiter.*
 
-## Vue d'ensemble
+## Vue d’ensemble
 
 Cette application permet d'intégrée une tuile personalisée dans le portail utilisateur de YunoHost. Les cas d'usage typiques sont:
 - **redirection 301/302 visible** : avoir une tuile d'app "virtuelle" qui se contente de rediriger vers une autre url ou un site externe
@@ -22,8 +23,7 @@ Cette application permet d'intégrée une tuile personalisée dans le portail ut
 En terme technique: cette app se contente de rajouter le morceau de configuration NGINX approprié avec soit `redirect` ou `proxy_pass`, et la tuile YunoHost + configuration SSOwat correspondante.
 
 
-**Version incluse :** 1.0.2~ynh1
-
+**Version incluse :** 1.0.2~ynh1
 ## Avertissements / informations importantes
 
 ## Types de redirection
@@ -47,8 +47,8 @@ L'adresse du client restera inchangé dans le navigateur. Typiquement utilisé p
 
 ## Documentations et ressources
 
-* Site officiel de l'app : <https://github.com/YunoHost-Apps/redirect_ynh>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_redirect>
+* Site officiel de l’app : <https://github.com/YunoHost-Apps/redirect_ynh>
+* YunoHost Store: <https://apps.yunohost.org/app/redirect>
 * Signaler un bug : <https://github.com/YunoHost-Apps/redirect_ynh/issues>
 
 ## Informations pour les développeurs
@@ -63,4 +63,4 @@ ou
 sudo yunohost app upgrade redirect -u https://github.com/YunoHost-Apps/redirect_ynh/tree/testing --debug
 ```
 
-**Plus d'infos sur le packaging d'applications :** <https://yunohost.org/packaging_apps>
+**Plus d’infos sur le packaging d’applications :** <https://yunohost.org/packaging_apps>
