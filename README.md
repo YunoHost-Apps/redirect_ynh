@@ -48,7 +48,7 @@ Visitor's address bar will remain the same. Typically used to integrate into Yun
 ## Documentation and resources
 
 * Upstream app code repository: <https://github.com/YunoHost-Apps/redirect_ynh>
-* YunoHost documentation for this app: <https://yunohost.org/app_redirect>
+* YunoHost Store: <https://apps.yunohost.org/app/redirect>
 * Report a bug: <https://github.com/YunoHost-Apps/redirect_ynh/issues>
 
 ## Developer info

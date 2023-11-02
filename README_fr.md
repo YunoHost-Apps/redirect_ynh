@@ -48,7 +48,7 @@ L'adresse du client restera inchangé dans le navigateur. Typiquement utilisé p
 ## Documentations et ressources
 
 * Dépôt de code officiel de l’app : <https://github.com/YunoHost-Apps/redirect_ynh>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_redirect>
+* YunoHost Store: <https://apps.yunohost.org/app/redirect>
 * Signaler un bug : <https://github.com/YunoHost-Apps/redirect_ynh/issues>
 
 ## Informations pour les développeurs
