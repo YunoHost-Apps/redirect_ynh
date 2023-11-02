@@ -23,7 +23,7 @@ This application allows to integrate a custom tile in YunoHost's user portal. Ty
 In technical terms: this app only adds a NGINX configuration snippet with either `redirect` or `proxy_pass` rule, and a YunoHost tile + appropriate SSOwat configuration.
 
 
-**Shipped version:** 1.0.2~ynh1
+**Shipped version:** 1.0.2~ynh2
 ## Disclaimers / important information
 
 ## Redirect type
