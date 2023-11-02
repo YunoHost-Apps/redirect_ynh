@@ -27,7 +27,7 @@ En terme technique: cette app se contente de rajouter le morceau de configuratio
 ## Documentations et ressources
 
 * Site officiel de l’app : <https://github.com/YunoHost-Apps/redirect_ynh>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_redirect>
+* YunoHost Store: <https://apps.yunohost.org/app/redirect>
 * Signaler un bug : <https://github.com/YunoHost-Apps/redirect_ynh/issues>
 
 ## Informations pour les développeurs
