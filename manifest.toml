@@ -44,11 +44,11 @@ ram.runtime = "50M"
     type = "select"
     default = "public_302"
 
-    [install.redirect_type.choices]
-    public_302 = "Visible redirect (302, temporary). Everybody will be able to access it."
-    public_301 = "Visible redirect (301, permanent). Everybody will be able to access it."
-    public_proxy = "Proxy, invisible (NGINX proxy_pass). Everybody will be able to access it."
-    private_proxy = "Proxy, invisible (NGINX proxy_pass). Only accessible for allowed users."
+    #[install.redirect_type.choices]
+    choices.public_302 = "Visible redirect (302, temporary). Everybody will be able to access it."
+    choices.public_301 = "Visible redirect (301, permanent). Everybody will be able to access it."
+    choices.public_proxy = "Proxy, invisible (NGINX proxy_pass). Everybody will be able to access it."
+    choices.private_proxy = "Proxy, invisible (NGINX proxy_pass). Only accessible for allowed users."
 
 [resources]
     [resources.system_user]
