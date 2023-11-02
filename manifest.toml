@@ -41,7 +41,7 @@ ram.runtime = "50M"
     [install.redirect_type]
     ask.en = "Redirect type"
     ask.fr = "Type de redirection"
-    type = "string"
+    type = "select"
     default = "public_302"
 
     [install.redirect_type.choices]
