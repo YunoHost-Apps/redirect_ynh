@@ -27,7 +27,7 @@ In technical terms: this app only adds a NGINX configuration snippet with either
 ## Documentation and resources
 
 * Official app website: <https://github.com/YunoHost-Apps/redirect_ynh>
-* YunoHost documentation for this app: <https://yunohost.org/app_redirect>
+* YunoHost Store: <https://apps.yunohost.org/app/redirect>
 * Report a bug: <https://github.com/YunoHost-Apps/redirect_ynh/issues>
 
 ## Developer info
