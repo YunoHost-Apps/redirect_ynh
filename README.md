@@ -5,7 +5,8 @@ It shall NOT be edited by hand.
 
 # Redirect for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/redirect.svg)](https://dash.yunohost.org/appci/app/redirect) ![Working status](https://ci-apps.yunohost.org/ci/badges/redirect.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/redirect.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/redirect.svg)](https://dash.yunohost.org/appci/app/redirect) ![Working status](https://ci-apps.yunohost.org/ci/badges/redirect.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/redirect.maintain.svg)
+
 [![Install Redirect with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=redirect)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -46,7 +47,7 @@ Visitor's address bar will remain the same. Typically used to integrate into Yun
 
 ## Documentation and resources
 
-* Official app website: <https://github.com/YunoHost-Apps/redirect_ynh>
+* Upstream app code repository: <https://github.com/YunoHost-Apps/redirect_ynh>
 * YunoHost documentation for this app: <https://yunohost.org/app_redirect>
 * Report a bug: <https://github.com/YunoHost-Apps/redirect_ynh/issues>
 
