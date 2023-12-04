@@ -1,44 +1,10 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source /usr/share/yunohost/helpers
 
-#=================================================
-# LOAD SETTINGS
-#=================================================
+ynh_restore_file "/etc/nginx/conf.d/${domain}.d/${app}.conf"
 
-# Validate redirect path
-url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
-[[ ! $redirect_path =~ $url_regex ]] && ynh_die "Invalid destination: $redirect_path" 1
-
-# Check configuration files
-NGINX_CONF="/etc/nginx/conf.d/${domain}.d/${app}.conf"
-[[ -f $NGINX_CONF ]] && ynh_die "The NGINX configuration already exists at '${NGINX_CONF}'. You should safely delete it before restoring this app."
-
-# Restore configuration files
-ynh_restore_file "$NGINX_CONF"
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-
-# Make app public if necessary
-if [ "$redirect_type" != "private_proxy" ]
-then
-	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_permission_update --permission="main" --add="visitors"
-fi
-
-#=================================================
-# RELOAD NGINX AND PHP-FPM
-#=================================================
 ynh_script_progression --message="Reloading NGINX web server..." --weight=1
-
 ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================

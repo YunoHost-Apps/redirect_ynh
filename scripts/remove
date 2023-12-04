@@ -12,8 +12,8 @@ source /usr/share/yunohost/helpers
 # REMOVE NGINX CONFIGURATION
 #=================================================
 
-# Remove configuration files
-ynh_secure_remove /etc/nginx/conf.d/$domain.d/$app.conf
+# Remove the dedicated NGINX config
+ynh_remove_nginx_config
 
 #=================================================
 # END OF SCRIPT

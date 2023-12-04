@@ -8,57 +8,19 @@
 
 source /usr/share/yunohost/helpers
 
-#=================================================
-# RETRIEVE ARGUMENTS FROM THE MANIFEST
-#=================================================
-
-
-# Validate redirect path
-url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
-[[ ! $redirect_path =~ $url_regex ]] && ynh_die "Invalid destination: $redirect_path" 1
-
 # Avoid uncrypted remote destination with reverse proxy mode
 # Indeed the SSO send the password in all requests in HTTP headers
 url_regex='^(http://(127\.[0-9]+\.[0-9]+\.[0-9]+|localhost)|https://.*)(:[0-9]+)?(/.*)?$'
-[[ "$redirect_type" = "proxy" ]] && [[ ! $redirect_path =~ $url_regex ]] && ynh_die \
-"For secure reason, you can't use an unencrypted http remote destination couple with ssowat for your reverse proxy: $redirect_path" 1
-
+[[ "$redirect_type" = "reverseproxy" ]] && [[ ! $redirect_path =~ $url_regex ]] && ynh_die \
+"For secure reason, you can't use an unencrypted http remote destination coupled with ssowat for your reverse proxy: $redirect_path" 1
 
 #=================================================
 # CONFIGURE NGINX
 #=================================================
 ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
-# Nginx configuration
-for FILE in $(ls ../conf/nginx-*.conf)
-do
-    ynh_replace_string "YNH_LOCATION" "$path" $FILE
-done
-if [ "$redirect_type" = "public_302" ];
-then
-    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-302.conf
-    cp ../conf/nginx-visible-302.conf /etc/nginx/conf.d/$domain.d/$app.conf
-elif [ "$redirect_type" = "public_301" ];
-then
-    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-301.conf
-    cp ../conf/nginx-visible-301.conf /etc/nginx/conf.d/$domain.d/$app.conf
-elif [ "$redirect_type" = "public_proxy" ] || [ "$redirect_type" = "private_proxy" ];
-then
-    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-proxy.conf
-    cp ../conf/nginx-proxy.conf /etc/nginx/conf.d/$domain.d/$app.conf
-fi
-
-#=================================================
-# CONFIGURE SSOWAT
-#=================================================
-ynh_script_progression --message="Configuring permissions..." --weight=2
-
-# Make app public if necessary
-if [ "$redirect_type" != "private_proxy" ]
-then
-	# unprotected_uris allows SSO credentials to be passed anyway.
-    ynh_permission_update --permission="main" --add="visitors"
-fi
+mv ../conf/{nginx-$redirect_type.conf,nginx.conf}
+ynh_add_nginx_config
 
 #=================================================
 # END OF SCRIPT

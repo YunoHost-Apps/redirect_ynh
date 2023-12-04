@@ -1,11 +1,4 @@
-
 #!/bin/bash
-
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
 
 source /usr/share/yunohost/helpers
 
@@ -13,91 +6,26 @@ source /usr/share/yunohost/helpers
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
 
-# Fix is_public as a boolean value
-# Default value for redirect_type if upgrading from https://github.com/scith/redirect_ynh
-if [ -z "$redirect_type" ];
+if [[ "${redirect_type:-}" == *"proxy"* ]]
 then
-    redirect_type="proxy"
-    ynh_app_setting_set $app 'redirect_type' $redirect_type
+    redirect_type="reverseproxy"
+else
+    redirect_type="redirect"
 fi
+ynh_app_setting_set $app 'redirect_type' $redirect_type
 
-# Migrate away from old stuff with 'is_public' and old redirect type names
-is_public=$(ynh_app_setting_get "$app" is_public)
-
-if [ -n "$is_public" ]
+if [[ -z "${target:-}" ]] && [[ -n "${redirect_path:-}" ]]
 then
-     if [ "$is_public" = "Yes" ]; then
-        is_public=1
-     elif [ "$is_public" = "No" ]; then
-        is_public=0
-    fi
-
-    if [ "$is_public" = "0" ] && [ "$redirect_type" != "proxy" ]; then
-       echo "WARNING: You previously had a 'supposedly' private 301 or 302 redirection... but it was found that it was public all along and it is not easy to create such a private redirection. Your 301 or 302 redirection will be re-flagged as public..." >&2
-       is_public=1
-    fi
-
-if [ "$redirect_type" == "proxy" ] && [ "$is_public" = "1" ]
-    then
-        redirect_type="public_proxy"
-    elif [ "$redirect_type" == "proxy" ] && [ "$is_public" = "0" ]
-    then
-        redirect_type="private_proxy"
-    elif [ "$redirect_type" == "visible_302" ]
-    then
-        redirect_type="public_302"
-    elif [ "$redirect_type" == "visible_301" ]
-    then
-        redirect_type="public_301"
-    fi
-    
-    ynh_app_setting_set $app 'redirect_type' $redirect_type
+    target="$redirect_path"
+    ynh_app_setting_set $app target "$redirect_path"
 fi
-
-#=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
-#=================================================
-
-# Validate redirect path
-url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
-[[ ! $redirect_path =~ $url_regex ]] && ynh_die "Invalid destination: $redirect_path" 1
 
 #=================================================
 # CONFIGURE NGINX
 #=================================================
+ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
-# Nginx configuration
-for FILE in $(ls ../conf/nginx-*.conf)
-do
-    ynh_replace_string "YNH_LOCATION" "$path" $FILE
-done
-if [ "$redirect_type" = "public_302" ];
-then
-    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-302.conf
-    cp ../conf/nginx-visible-302.conf /etc/nginx/conf.d/$domain.d/$app.conf
-elif [ "$redirect_type" = "public_301" ];
-then
-    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-301.conf
-    cp ../conf/nginx-visible-301.conf /etc/nginx/conf.d/$domain.d/$app.conf
-elif [ "$redirect_type" = "public_proxy" ] || [ "$redirect_type" = "private_proxy" ];
-then
-    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-proxy.conf
-    cp ../conf/nginx-proxy.conf /etc/nginx/conf.d/$domain.d/$app.conf
-fi
-
-#=================================================
-# CONFIGURE SSOWAT
-#=================================================
-
-# Make app public if necessary
-if [ "$redirect_type" != "private_proxy" ]
-then
-	# unprotected_uris allows SSO credentials to be passed anyway.
-    ynh_permission_update --permission="main" --add="visitors"
-fi
-
-#=================================================
-# END OF SCRIPT
-#=================================================
+mv ../conf/{nginx-$redirect_type.conf,nginx.conf}
+ynh_add_nginx_config
 
 ynh_script_progression --message="Upgrade of $app completed" --last

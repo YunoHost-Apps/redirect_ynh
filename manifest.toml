@@ -5,7 +5,7 @@ name = "Redirect"
 description.en = "Create a redirection or a proxy to another path"
 description.fr = "Créer une redirection ou un proxy vers un autre emplacement"
 
-version = "1.0.2~ynh1"
+version = "2.0~ynh1"
 
 maintainers = []
 
@@ -31,28 +31,27 @@ ram.runtime = "50M"
     type = "path"
     default = "/redirect"
 
-    [install.redirect_path]
-    ask.en = "Redirect destination path"
-    ask.fr = "Emplacement de destination"
-    type = "string"
-    example = "http://127.0.0.1:8080/app/"
-
     [install.redirect_type]
     ask.en = "Redirect type"
     ask.fr = "Type de redirection"
     type = "select"
-    default = "public_302"
+    choices.redirect = "Explicit redirection (HTTP 302). Redirect people to another URL."
+    choices.reverseproxy = "Reverse-proxy (nginx proxy_pass). Expose an app, typically that you manually installed (with or without Docker) locally or an another machine."
 
-    #[install.redirect_type.choices]
-    choices.public_302 = "Visible redirect (302, temporary). Everybody will be able to access it."
-    choices.public_301 = "Visible redirect (301, permanent). Everybody will be able to access it."
-    choices.public_proxy = "Proxy, invisible (NGINX proxy_pass). Everybody will be able to access it."
-    choices.private_proxy = "Proxy, invisible (NGINX proxy_pass). Only accessible for allowed users."
+    [install.target]
+    ask.en = "Target"
+    ask.fr = "Cible"
+    type = "url"
+    example = "http://127.0.0.1:1312/"
+
+    [install.init_main_permission]
+    default = "visitors"
 
 [resources]
+    # Meh we gotta keep this otherwise migrations from the v1 era will fail
+    # because they assume a system user resource existed in v1 and will want to
+    # delete it if not present anymore in the manifest ...
     [resources.system_user]
-
-    [resources.install_dir]
 
     [resources.permissions]
     main.url = "/"
