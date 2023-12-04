@@ -7,7 +7,7 @@ description.fr = "Créer une redirection ou un proxy vers un autre emplacement"
 
 version = "1.0.2~ynh1"
 
-maintainers = ["alexAubin"]
+maintainers = []
 
 [upstream]
 license = "AGPL-3.0-or-later"
@@ -17,8 +17,8 @@ website = "https://github.com/YunoHost-Apps/redirect_ynh"
 yunohost = ">= 11.2"
 architectures = "all"
 multi_instance = true
-ldap = false
-sso = false
+ldap = "not_relevant"
+sso = "not_relevant"
 disk = "50M"
 ram.build = "50M"
 ram.runtime = "50M"
@@ -36,7 +36,6 @@ ram.runtime = "50M"
     ask.fr = "Emplacement de destination"
     type = "string"
     example = "http://127.0.0.1:8080/app/"
-    default = "http://127.0.0.1"
 
     [install.redirect_type]
     ask.en = "Redirect type"
