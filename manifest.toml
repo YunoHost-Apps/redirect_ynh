@@ -46,6 +46,7 @@ ram.runtime = "50M"
     example = "http://127.0.0.1:1312/"
 
     [install.init_main_permission]
+    type = "groups"
     default = "visitors"
 
 [resources]
