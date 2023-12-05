@@ -2,9 +2,19 @@ test_format = 1.0
 
 [default]
 
-    # -------------------------------
-    # Default args to use for install
-    # -------------------------------
+    args.redirect_type = "redirect"
+    args.target = "https://fr.wikipedia.org"
 
-    args.redirect_type = "public_302"
-    args.redirect_path = "http://127.0.0.1"
+    test_upgrade_from.09cf1c6b.name = "v1 era"
+    test_upgrade_from.09cf1c6b.args.redirect_type = "visible_302"
+    test_upgrade_from.09cf1c6b.args.redirect_path = "https://fr.wikipedia.org"
+
+
+[reverseproxy]
+
+    args.redirect_type = "reverseproxy"
+    args.target = "http://127.0.0.1:80"
+
+    test_upgrade_from.09cf1c6b.name = "v1 era"
+    test_upgrade_from.09cf1c6b.args.redirect_type = "proxy_public"
+    test_upgrade_from.09cf1c6b.args.redirect_path = "http://127.0.0.1:80"
