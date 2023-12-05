@@ -26,7 +26,7 @@ En terme technique: cette app se contente de rajouter le morceau de configuratio
 **Version incluse :** 2.0~ynh1
 ## Documentations et ressources
 
-* Site officiel de l’app : <https://github.com/YunoHost-Apps/redirect_ynh>
+* Site officiel de l’app : <https://en.wikipedia.org/wiki/Reverse_proxy>
 * YunoHost Store: <https://apps.yunohost.org/app/redirect>
 * Signaler un bug : <https://github.com/YunoHost-Apps/redirect_ynh/issues>
 

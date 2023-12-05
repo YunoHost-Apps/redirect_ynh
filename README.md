@@ -26,7 +26,7 @@ In technical terms: this app only adds a NGINX configuration snippet with either
 **Shipped version:** 2.0~ynh1
 ## Documentation and resources
 
-* Official app website: <https://github.com/YunoHost-Apps/redirect_ynh>
+* Official app website: <https://en.wikipedia.org/wiki/Reverse_proxy>
 * YunoHost Store: <https://apps.yunohost.org/app/redirect>
 * Report a bug: <https://github.com/YunoHost-Apps/redirect_ynh/issues>
 

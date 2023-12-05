@@ -11,7 +11,7 @@ maintainers = []
 
 [upstream]
 license = "AGPL-3.0-or-later"
-website = "https://github.com/YunoHost-Apps/redirect_ynh"
+website = "https://en.wikipedia.org/wiki/Reverse_proxy"
 
 [integration]
 yunohost = ">= 11.2"
@@ -37,6 +37,7 @@ ram.runtime = "50M"
     type = "select"
     choices.redirect = "Explicit redirection (HTTP 302). Redirect people to another URL."
     choices.reverseproxy = "Reverse-proxy (nginx proxy_pass). Expose an app, typically that you manually installed (with or without Docker) locally or an another machine."
+    default = "redirect"
 
     [install.target]
     ask.en = "Target"
@@ -45,6 +46,7 @@ ram.runtime = "50M"
     example = "http://127.0.0.1:1312/"
 
     [install.init_main_permission]
+    type = "group"
     default = "visitors"
 
 [resources]
