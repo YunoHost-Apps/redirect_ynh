@@ -14,11 +14,11 @@ test_format = 1.0
 [reverseproxy]
 
     args.redirect_type = "reverseproxy"
-    args.target = "http://127.0.0.1/yunohost/api"
+    args.target = "http://127.0.0.1"
 
     exclude = ["install.private", "install.multi", "backup_restore"]
 
     test_upgrade_from.09cf1c6b.name = "v1 era"
     test_upgrade_from.09cf1c6b.args.domain = "domain.tld"
     test_upgrade_from.09cf1c6b.args.redirect_type = "proxy_public"
-    test_upgrade_from.09cf1c6b.args.redirect_path = "http://127.0.0.1/yunohost/api"
+    test_upgrade_from.09cf1c6b.args.redirect_path = "http://127.0.0.1"
