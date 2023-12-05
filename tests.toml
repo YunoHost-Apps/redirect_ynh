@@ -3,7 +3,7 @@ test_format = 1.0
 [default]
 
     args.redirect_type = "redirect"
-    args.target = "https://en.wikipedia.org/wiki/HTTP_302"
+    args.target = "http://example.com/"
 
     test_upgrade_from.09cf1c6b.name = "v1 era"
     test_upgrade_from.09cf1c6b.args.domain = "domain.tld"
@@ -14,7 +14,7 @@ test_format = 1.0
 [reverseproxy]
 
     args.redirect_type = "reverseproxy"
-    args.target = "http://127.0.0.1:80"
+    args.target = "http://127.0.0.1/yunohost/api"
 
     exclude = ["install.private", "install.multi", "backup_restore"]
 
