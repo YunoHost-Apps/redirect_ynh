@@ -11,7 +11,7 @@ maintainers = []
 
 [upstream]
 license = "AGPL-3.0-or-later"
-website = "https://github.com/YunoHost-Apps/redirect_ynh"
+website = "https://en.wikipedia.org/wiki/Reverse_proxy"
 
 [integration]
 yunohost = ">= 11.2"
@@ -46,7 +46,7 @@ ram.runtime = "50M"
     example = "http://127.0.0.1:1312/"
 
     [install.init_main_permission]
-    type = "groups"
+    type = "group"
     default = "visitors"
 
 [resources]
