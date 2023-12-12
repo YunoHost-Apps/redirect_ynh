@@ -6,20 +6,17 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
+source _common.sh
 source /usr/share/yunohost/helpers
 
-# Avoid uncrypted remote destination with reverse proxy mode
-# Indeed the SSO send the password in all requests in HTTP headers
-url_regex='^(http://(127\.[0-9]+\.[0-9]+\.[0-9]+|localhost)|https://.*)(:[0-9]+)?(/.*)?$'
-[[ "$redirect_type" = "reverseproxy" ]] && [[ ! "$target" =~ $url_regex ]] && ynh_die \
-"For secure reason, you can't use an unencrypted http remote destination coupled with ssowat for your reverse proxy: $target" 1
+_validate_redirect_uri
 
 #=================================================
 # CONFIGURE NGINX
 #=================================================
 ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
-mv ../conf/{nginx-$redirect_type.conf,nginx.conf}
+mv ../conf/{"nginx-$redirect_type.conf",nginx.conf}
 ynh_add_nginx_config
 
 #=================================================
