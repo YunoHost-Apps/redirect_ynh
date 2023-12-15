@@ -6,19 +6,19 @@
         "en": "Create a redirection or a proxy to another path",
         "fr": "Créer une redirection ou un proxy vers un autre emplacement"
     },
-    "version": "1.0.2~ynh1",
+    "version": "1.0.2~ynh2",
     "license": "AGPL-3.0-or-later",
     "url": "https://github.com/YunoHost-Apps/redirect_ynh",
     "upstream": {
         "license": "AGPL-3.0-or-later",
-        "website": "https://github.com/YunoHost-Apps/redirect_ynh"
+        "code": "https://github.com/YunoHost-Apps/redirect_ynh"
     },
     "maintainer": {
         "name": "alexAubin",
         "email": "alex.aubin@mailoo.org"
     },
     "requirements": {
-        "yunohost": ">= 4.2.0"
+        "yunohost": ">= 11.2"
     },
     "multi_instance": true,
     "services": [
@@ -49,7 +49,7 @@
             },
             {
                 "name": "redirect_type",
-                "type": "string",
+                "type": "select",
                 "ask": {
                     "en": "Redirect type",
                     "fr": "Type de redirection"

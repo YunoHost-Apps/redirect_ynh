@@ -23,7 +23,7 @@ Cette application permet d'intégrée une tuile personalisée dans le portail ut
 En terme technique: cette app se contente de rajouter le morceau de configuration NGINX approprié avec soit `redirect` ou `proxy_pass`, et la tuile YunoHost + configuration SSOwat correspondante.
 
 
-**Version incluse :** 1.0.2~ynh1
+**Version incluse :** 1.0.2~ynh2
 ## Avertissements / informations importantes
 
 ## Types de redirection
@@ -47,7 +47,7 @@ L'adresse du client restera inchangé dans le navigateur. Typiquement utilisé p
 
 ## Documentations et ressources
 
-* Site officiel de l’app : <https://github.com/YunoHost-Apps/redirect_ynh>
+* Dépôt de code officiel de l’app : <https://github.com/YunoHost-Apps/redirect_ynh>
 * YunoHost Store: <https://apps.yunohost.org/app/redirect>
 * Signaler un bug : <https://github.com/YunoHost-Apps/redirect_ynh/issues>
 
