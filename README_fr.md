@@ -24,7 +24,6 @@ En terme technique: cette app se contente de rajouter le morceau de configuratio
 
 
 **Version incluse :** 1.0.2~ynh2
-
 ## Avertissements / informations importantes
 
 ## Types de redirection
