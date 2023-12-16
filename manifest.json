@@ -28,8 +28,7 @@
         "install" : [
             {
                 "name": "domain",
-                "type": "domain",
-                "example": "domain.org"
+                "type": "domain"
             },
             {
                 "name": "path",
@@ -55,12 +54,21 @@
                     "fr": "Type de redirection"
                 },
                 "choices": {
-                  "public_302": "Visible redirect (302, temporary). Everybody will be able to access it.",
-                  "public_301": "Visible redirect (301, permanent). Everybody will be able to access it.",
-                  "public_proxy": "Proxy, invisible (NGINX proxy_pass). Everybody will be able to access it.",
-                  "private_proxy": "Proxy, invisible (NGINX proxy_pass). Only accessible for allowed users."
+                  "public_302": "Visible redirect (302, temporary).",
+                  "public_302_subpath": "Visible redirect (302, temporary) + subpaths are propagated.",
+                  "public_301": "Visible redirect (301, permanent).",
+                  "public_301_subpath": "Visible redirect (301, permanent) + subpaths are propagated.",
+                  "proxy": "Proxy, invisible (NGINX proxy_pass)."
                 },
-                "default": "public_302"
+                "default": "public_302_subpath",
+                "help": "Subpaths are propagated = transfer the subpath into the redirection. So if you redirect www.example.com to example.com, request https://www.example.com/foo/bar will redirect onto https://example.com/foo/bar instead of https://example.com"
+            },
+            {
+                "name": "is_public",
+                "type": "boolean",
+                "default": true,
+                "visible": "redirect_type == 'proxy'",
+                "help": "You can manage public or private mode only with the proxy mode."
             }
         ]
     }

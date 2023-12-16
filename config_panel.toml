@@ -1,0 +1,56 @@
+version = "1.0"
+
+[main]
+name = "Auto-configuration"
+
+    [main.redirect]
+    name = ""
+    optional = false
+        
+        [main.redirect.domain]
+        ask = "Domain"
+        type = "domain"
+        example = "domain.org"
+        
+        [main.redirect.path_url]
+        ask = "Path"
+        type = "path"
+        bind = "path_url:/etc/yunohost/__APP__/settings.yml"
+        example = "/redirect"
+        
+        [main.redirect.redirect_path]
+        ask = "Redirect destination path"
+        type = "url"
+
+        [main.redirect.redirect_type]
+        ask = "Redirect type"
+        type = "select"
+        choices.public_302 = "Visible temporary redirect (HTTP 302)"
+        choices.public_302_subpath = "Visible temporary redirect (HTTP 302) + subpaths are propagated"
+        choices.public_301 = "Visible permanent redirect (HTTP 301)"
+        choices.public_301_subpath = "Visible permanent redirect (HTTP 301) + subpaths are propagated"
+        choices.proxy = "Invisible redirect using proxy (NGINX proxy_pass)"
+        help = "Subpaths are propagated = transfer the subpath into the redirection. So if you redirect www.example.com to example.com, request https://www.example.com/foo/bar will redirect onto https://example.com/foo/bar instead of https://example.com"
+        
+        [main.redirect.frame_allowed]
+        ask = "Frame allowed"
+        type = "boolean"
+        visible = "redirect_type == 'proxy'"
+        optional = true
+        
+        [main.redirect.frame_ancestors]
+        ask = "Frame ancestors"
+        type = "tags"
+        visible = "redirect_type == 'proxy' and frame_allowed"
+        help = "Any valid host source like `https://example.com`, know more https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors"
+        optional = true
+        
+        [main.redirect.client_max_body_size]
+        ask = "Maximum size of a requests"
+        type = "string"
+        help = "If you want to upload 100m video you should multiply by 1.4 ratio (140m) cause it will be mime-encoded. Note that temporary space is needed equal to the total size of all concurrent uploads."
+        pattern.regexp = "^[0-9]{1,15}(k|m|g|t)$"
+        pattern.error = "Provide a size like 20m or 100k"
+        visible = "redirect_type == 'proxy'"
+        optional = true
+        

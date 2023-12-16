@@ -25,6 +25,8 @@ domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 redirect_type=$(ynh_app_setting_get --app=$app --key=redirect_type)
 redirect_path=$(ynh_app_setting_get --app=$app --key=redirect_path)
+frame_ancestors=$(ynh_app_setting_get --app=$app --key=frame_ancestors)
+client_max_body_size=$(ynh_app_setting_get --app=$app --key=client_max_body_size)
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
@@ -36,17 +38,6 @@ NGINX_CONF="/etc/nginx/conf.d/${domain}.d/${app}.conf"
 
 # Restore configuration files
 ynh_restore_file "$NGINX_CONF"
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-
-# Make app public if necessary
-if [ "$redirect_type" != "private_proxy" ]
-then
-	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_permission_update --permission="main" --add="visitors"
-fi
 
 #=================================================
 # RELOAD NGINX AND PHP-FPM

@@ -19,6 +19,34 @@ domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 redirect_type=$(ynh_app_setting_get --app=$app --key=redirect_type)
 redirect_path=$(ynh_app_setting_get --app=$app --key=redirect_path)
+frame_ancestors=$(ynh_app_setting_get --app=$app --key=frame_ancestors)
+client_max_body_size=$(ynh_app_setting_get --app=$app --key=client_max_body_size)
+is_public=$(ynh_app_setting_get --app=$app --key=is_public)
+
+#=================================================
+# CHECK VERSION
+#=================================================
+
+### This helper will compare the version of the currently installed app and the version of the upstream package.
+### $upgrade_type can have 2 different values
+### - UPGRADE_APP if the upstream app version has changed
+### - UPGRADE_PACKAGE if only the YunoHost package has changed
+### ynh_check_app_version_changed will stop the upgrade if the app is up to date.
+### UPGRADE_APP should be used to upgrade the core app only if there's an upgrade to do.
+upgrade_type=$(ynh_check_app_version_changed)
+
+#=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
+
+# Backup the current version of the app
+ynh_backup_before_upgrade
+ynh_clean_setup () {
+	# restore it if the upgrade fails
+	ynh_restore_upgradebackup
+}
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -47,13 +75,7 @@ then
        is_public=1
     fi
 
-    if [ "$redirect_type" == "proxy" ] && [ "$is_public" = "1" ]
-    then
-        redirect_type="public_proxy"
-    elif [ "$redirect_type" == "proxy" ] && [ "$is_public" = "0" ]
-    then
-        redirect_type="private_proxy"
-    elif [ "$redirect_type" == "visible_302" ]
+    if [ "$redirect_type" == "visible_302" ]
     then
         redirect_type="public_302"
     elif [ "$redirect_type" == "visible_301" ]
@@ -62,6 +84,7 @@ then
     fi
     
     ynh_app_setting_set $app 'redirect_type' $redirect_type
+    ynh_app_setting_set $app 'is_public' $is_public
 fi
 
 # Migrate legacy permissions to new system
@@ -72,18 +95,20 @@ then
     ynh_app_setting_delete --app=$app --key=is_public
 fi
 
-#=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
-#=================================================
+# Introduce frame_ancestors
+if [ -z "$frame_ancestors" ];
+then
+    frame_ancestors="'none'"
+    ynh_app_setting_set $app 'frame_ancestors' $frame_ancestors
+fi
 
-# Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
-	# restore it if the upgrade fails
-	ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+# Introduce client_max_body_size
+if [ -z "$client_max_body_size" ];
+then
+    client_max_body_size="1m"
+    ynh_app_setting_set $app 'client_max_body_size' $client_max_body_size
+fi
+
 
 # Validate redirect path
 url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
@@ -94,33 +119,20 @@ url_regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=
 #=================================================
 
 # Nginx configuration
-for FILE in $(ls ../conf/nginx-*.conf)
-do
-    ynh_replace_string "YNH_LOCATION" "$path_url" $FILE
-done
-if [ "$redirect_type" = "public_302" ];
-then
-    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-302.conf
-    cp ../conf/nginx-visible-302.conf /etc/nginx/conf.d/$domain.d/$app.conf
-elif [ "$redirect_type" = "public_301" ];
-then
-    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-visible-301.conf
-    cp ../conf/nginx-visible-301.conf /etc/nginx/conf.d/$domain.d/$app.conf
-elif [ "$redirect_type" = "public_proxy" ] || [ "$redirect_type" = "private_proxy" ];
-then
-    ynh_replace_string "YNH_REDIRECT_PATH" "$redirect_path" ../conf/nginx-proxy.conf
-    cp ../conf/nginx-proxy.conf /etc/nginx/conf.d/$domain.d/$app.conf
-fi
+cp ../conf/nginx-$redirect_type.conf ../conf/nginx.conf
+ynh_add_nginx_config
 
 #=================================================
 # CONFIGURE SSOWAT
 #=================================================
 
-# Make app public if necessary
-if [ "$redirect_type" != "private_proxy" ]
+# Everyone can access the app.
+# The "main" permission is automatically created before the install script.
+if [[ $redirect_type != "proxy" ]]
 then
-	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_permission_update --permission="main" --add="visitors"
+    ynh_permission_update --permission="main" --add="visitors" --protected=1
+else
+    ynh_permission_update --permission="main" --protected=0
 fi
 
 #=================================================
