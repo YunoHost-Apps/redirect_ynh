@@ -1,13 +1,5 @@
 #!/bin/bash
 
-#=================================================
-# COMMON VARIABLES
-#=================================================
-
-#=================================================
-# PERSONAL HELPERS
-#=================================================
-
 URL_REGEX_VALID='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
 URL_REGEX_SECURE='^(http://(127\.[0-9]+\.[0-9]+\.[0-9]+|localhost)|https://.*)(:[0-9]+)?(/.*)?$'
 
@@ -23,10 +15,26 @@ _validate_redirect_uri() {
     fi
 }
 
-#=================================================
-# EXPERIMENTAL HELPERS
-#=================================================
+_add_dummy_service() {
+    cat << EOF > /etc/systemd/system/whatever.service
+[Unit]
+Description=Whatever
+After=network.target
 
-#=================================================
-# FUTURE OFFICIAL HELPERS
-#=================================================
+[Service]
+WorkingDirectory=/redirect/
+ExecStart=python3 -m http.server -b 127.0.0.1 1234
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    mkdir -p /redirect
+    echo "helloworld" > /redirect/index.html
+    systemctl daemon-reload
+    ynh_systemd_action --service_name=whatever --action=enable
+    ynh_systemd_action --service_name=whatever --action=restart
+
+    true
+}

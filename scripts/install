@@ -11,6 +11,12 @@ source /usr/share/yunohost/helpers
 
 _validate_redirect_uri
 
+# When testing on the CI, we need a service to test the reverse-proxying
+if [[ ${PACKAGE_CHECK_EXEC} == "1" ]] && [[ "$redirect_type" == "reverseproxy" ]]
+then
+    _add_dummy_service
+fi
+
 #=================================================
 # CONFIGURE NGINX
 #=================================================
@@ -18,6 +24,14 @@ ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
 mv ../conf/{"nginx-$redirect_type.conf",nginx.conf}
 ynh_add_nginx_config
+
+
+if [[ ${PACKAGE_CHECK_EXEC} == "1" ]] && [[ "$redirect_type" == "reverseproxy" ]]
+then
+    systemctl status whatever >&2
+    sleep 3
+fi
+
 
 #=================================================
 # END OF SCRIPT
