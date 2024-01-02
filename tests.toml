@@ -4,29 +4,13 @@ test_format = 1.0
 
 [default]
 
-    args.redirect_type = "reverseproxy"
-    args.target = "http://127.0.0.1:1234/"
-
-    exclude = ["install.private", "install.multi", "backup_restore", "change_url"]
-
-    [default.test_upgrade_from.09cf1c6b]
-    name = "v1 era"
-    args.domain = "domain.tld"
-    args.path = "/"
-    args.redirect_type = "proxy"
-    args.redirect_path = "http://127.0.0.1:1234/"
-    args.is_public = true
-
-
-[redirect]
-
     args.redirect_type = "redirect"
     args.target = "https://127.0.0.1"
 
     # Turns out 302 redirects cant be made private because they are interpreted before going through the sso ...
     exclude = ["install.private"]
 
-    [redirect.test_upgrade_from.09cf1c6b]
+    [default.test_upgrade_from.09cf1c6b]
     name = "v1 era"
     args.domain = "domain.tld"
     args.path = "/"
@@ -34,4 +18,17 @@ test_format = 1.0
     args.redirect_path = "https://127.0.0.1"
     args.is_public = true
 
+[reverseproxy]
 
+    args.redirect_type = "reverseproxy"
+    args.target = "http://127.0.0.1:1234"
+
+    exclude = ["install.private", "install.multi", "backup_restore", "change_url"]
+
+    [reverseproxy.test_upgrade_from.09cf1c6b]
+    name = "v1 era"
+    args.domain = "domain.tld"
+    args.path = "/"
+    args.redirect_type = "proxy"
+    args.redirect_path = "http://127.0.0.1:1234"
+    args.is_public = true

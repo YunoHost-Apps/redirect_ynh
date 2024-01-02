@@ -10,7 +10,7 @@ _validate_redirect_uri() {
 
     # Avoid uncrypted remote destination with reverse proxy mode
     # Indeed the SSO send the password in all requests in HTTP headers
-    if [[ "$redirect_type" = "proxy" ]] && [[ ! $target =~ $URL_REGEX_SECURE ]]; then
+    if [[ "$redirect_type" = "reverseproxy" ]] && [[ ! $target =~ $URL_REGEX_SECURE ]]; then
         ynh_die "For secure reason, you can't use an unencrypted http remote destination couple with ssowat for your reverse proxy: $target" 1
     fi
 }
