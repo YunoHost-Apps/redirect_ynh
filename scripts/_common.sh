@@ -31,7 +31,9 @@ WantedBy=multi-user.target
 EOF
 
     mkdir -p /redirect
+    mkdir -p /redirect/path
     echo "helloworld" > /redirect/index.html
+    echo "helloworld" > /redirect/path/index.html
     systemctl daemon-reload
     ynh_systemd_action --service_name=whatever --action=enable
     ynh_systemd_action --service_name=whatever --action=restart
