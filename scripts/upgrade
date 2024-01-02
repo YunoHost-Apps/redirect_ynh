@@ -12,12 +12,12 @@ if [[ "${redirect_type:-}" == *"proxy"* ]]; then
 else
     redirect_type="redirect"
 fi
-ynh_app_setting_set $app 'redirect_type' $redirect_type
+ynh_app_setting_set --app=$app --key='redirect_type' --value=$redirect_type
 
 if [[ -z "${target:-}" ]] && [[ -n "${redirect_path:-}" ]]; then
     target="$redirect_path"
     ynh_app_setting_delete --app=$app --key=redirect_path
-    ynh_app_setting_set --app=$app --key=target --value="$redirect_path"
+    ynh_app_setting_set --app=$app --key=target --value="$target"
 fi
 
 # When testing on the CI, we need a service to test the reverse-proxying

@@ -13,7 +13,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 # Copy the conf files
-ynh_backup "/etc/nginx/conf.d/${domain}.d/${app}.conf"
+ynh_backup --src_path="/etc/nginx/conf.d/${domain}.d/${app}.conf"
 
 #=================================================
 # END OF SCRIPT
