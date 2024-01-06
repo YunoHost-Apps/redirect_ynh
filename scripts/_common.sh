@@ -14,29 +14,3 @@ _validate_redirect_uri() {
         ynh_die --message="For secure reason, you can't use an unencrypted http remote destination couple with ssowat for your reverse proxy: $target" 1
     fi
 }
-
-_add_dummy_service() {
-    cat << EOF > /etc/systemd/system/whatever.service
-[Unit]
-Description=Whatever
-After=network.target
-
-[Service]
-WorkingDirectory=/redirect/
-ExecStart=python3 -m http.server -b 127.0.0.1 1234
-PrivateTmp=true
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-    mkdir -p /redirect
-    mkdir -p /redirect/path
-    echo "helloworld" > /redirect/index.html
-    echo "helloworld" > /redirect/path/index.html
-    systemctl daemon-reload
-    ynh_systemd_action --service_name=whatever --action=enable
-    ynh_systemd_action --service_name=whatever --action=restart
-
-    true
-}

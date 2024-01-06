@@ -20,12 +20,6 @@ if [[ -z "${target:-}" ]] && [[ -n "${redirect_path:-}" ]]; then
     ynh_app_setting_set --app=$app --key=target --value="$target"
 fi
 
-# When testing on the CI, we need a service to test the reverse-proxying
-if [[ ${PACKAGE_CHECK_EXEC} == "1" ]] && [[ "$redirect_type" == "reverseproxy" ]]
-then
-    _add_dummy_service
-fi
-
 #=================================================
 # CONFIGURE NGINX
 #=================================================

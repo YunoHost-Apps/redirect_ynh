@@ -25,6 +25,55 @@ test_format = 1.0
 
     exclude = ["install.private", "install.multi", "backup_restore", "change_url"]
 
+    preinstall = """
+    cat << EOF > /etc/systemd/system/whatever.service
+[Unit]
+Description=Whatever
+After=network.target
+
+[Service]
+WorkingDirectory=/redirect/
+ExecStart=python3 -m http.server -b 127.0.0.1 1234
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    mkdir -p /redirect
+    mkdir -p /redirect/path
+    echo "helloworld" > /redirect/index.html
+    echo "helloworld" > /redirect/path/index.html
+    systemctl daemon-reload
+    ynh_systemd_action --service_name=whatever --action=enable
+    ynh_systemd_action --service_name=whatever --action=restart
+    true
+"""
+    preupgrade = """
+    cat << EOF > /etc/systemd/system/whatever.service
+[Unit]
+Description=Whatever
+After=network.target
+
+[Service]
+WorkingDirectory=/redirect/
+ExecStart=python3 -m http.server -b 127.0.0.1 1234
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    mkdir -p /redirect
+    mkdir -p /redirect/path
+    echo "helloworld" > /redirect/index.html
+    echo "helloworld" > /redirect/path/index.html
+    systemctl daemon-reload
+    ynh_systemd_action --service_name=whatever --action=enable
+    ynh_systemd_action --service_name=whatever --action=restart
+    true
+"""
+
     [reverseproxy.test_upgrade_from.09cf1c6b]
     name = "v1 era"
     args.domain = "domain.tld"
