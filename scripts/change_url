@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #=================================================
-# GENERIC START
+# GENERIC STARTING
 #=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
@@ -9,18 +9,18 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
-_validate_redirect_uri
-
 #=================================================
-# CONFIGURE NGINX
+# STANDARD MODIFICATIONS
 #=================================================
-ynh_script_progression --message="Configuring NGINX web server..." --weight=1
+# MODIFY URL IN NGINX CONF
+#=================================================
+ynh_script_progression --message="Updating NGINX web server configuration..." --weight=2
 
 mv ../conf/{"nginx-$redirect_type.conf",nginx.conf}
-ynh_add_nginx_config
+ynh_change_url_nginx_config
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed" --last
+ynh_script_progression --message="Change of URL completed for $app" --last

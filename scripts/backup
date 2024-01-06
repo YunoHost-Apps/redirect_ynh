@@ -9,27 +9,11 @@
 source /usr/share/yunohost/helpers
 
 #=================================================
-# MANAGE SCRIPT FAILURE
-#=================================================
-
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
-
-#=================================================
-# LOAD SETTINGS
-#=================================================
-ynh_print_info --message="Loading installation settings..."
-
-# Retrieve arguments
-app=$YNH_APP_INSTANCE_NAME
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-
-#=================================================
 # BACKUP THE NGINX CONFIGURATION
 #=================================================
 
 # Copy the conf files
-ynh_backup "/etc/nginx/conf.d/${domain}.d/${app}.conf"
+ynh_backup --src_path="/etc/nginx/conf.d/${domain}.d/${app}.conf"
 
 #=================================================
 # END OF SCRIPT
