@@ -45,8 +45,7 @@ EOF
     echo "helloworld" > /redirect/index.html
     echo "helloworld" > /redirect/path/index.html
     systemctl daemon-reload
-    ynh_systemd_action --service_name=whatever --action=enable
-    ynh_systemd_action --service_name=whatever --action=restart
+    systemctl enable whatever --now
     true
 """
     preupgrade = """
@@ -69,8 +68,7 @@ EOF
     echo "helloworld" > /redirect/index.html
     echo "helloworld" > /redirect/path/index.html
     systemctl daemon-reload
-    ynh_systemd_action --service_name=whatever --action=enable
-    ynh_systemd_action --service_name=whatever --action=restart
+    systemctl enable whatever --now
     true
 """
 
