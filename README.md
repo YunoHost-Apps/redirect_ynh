@@ -16,11 +16,11 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 ## Overview
 
-This application allows to integrate a custom tile in YunoHost's user portal. Typical use cases include:
-- **visible 301/302 redirect** : having a "virtual" app tile that's just a redirection to another url or external website
-- **invisible redirect / reverse-proxy** : creating an app tile for a local app listening on a specific port, or a Docker container, or an app hosted on another machine
+This application allows to integrate a custom tile in YunoHost's user portal.
 
-In technical terms: this app only adds a NGINX configuration snippet with either `redirect` or `proxy_pass` rule, and a YunoHost tile + appropriate SSOwat configuration.
+There two typical use cases are covered:
+- **basic, explicit redirection** : this is a "virtual" app tile that just redirects to another url or external website using HTTP code 302
+- **reverse-proxy** : create an app tile to expose an app listening on a specific port, typically something that you manually installed (with or without Docker) locally or on another machine.
 
 
 **Shipped version:** 2.0~ynh1
