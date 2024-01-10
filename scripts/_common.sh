@@ -14,3 +14,12 @@ _validate_redirect_uri() {
         ynh_die --message="For secure reason, you can't use an unencrypted http remote destination couple with ssowat for your reverse proxy: $target" 1
     fi
 }
+
+_set_ynh_overlay() {
+    # Set the comment (or not) for the yunohost overlay
+    overlay_comment=""
+    if [[ "$ynh_overlay" == 0 ]]; then
+        overlay_comment="# "
+    fi
+    ynh_app_setting_set --app=$app --key=overlay_comment --value="$overlay_comment"
+}

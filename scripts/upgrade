@@ -20,6 +20,13 @@ if [[ -z "${target:-}" ]] && [[ -n "${redirect_path:-}" ]]; then
     ynh_app_setting_set --app=$app --key=target --value="$target"
 fi
 
+if [[ -z "${ynh_overlay:-}" ]]; then
+    ynh_overlay=1
+    ynh_app_setting_set --app=$app --key=ynh_overlay --value="$ynh_overlay"
+fi
+
+_set_ynh_overlay
+
 #=================================================
 # CONFIGURE NGINX
 #=================================================
