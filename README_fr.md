@@ -23,7 +23,7 @@ Ces deux cas d'usage sont gérés:
 - **reverse-proxy** : créer une tuile pour une application locale qui écoute sur un port donné, typiquement quelque chose que vous avez installé manuellement (avec ou sans Docker), sur cette machine ou sur une autre machine.
 
 
-**Version incluse :** 2.0~ynh1
+**Version incluse :** 2.0~ynh2
 ## Documentations et ressources
 
 * Site officiel de l’app : <https://en.wikipedia.org/wiki/Reverse_proxy>
