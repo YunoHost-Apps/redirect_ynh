@@ -24,6 +24,7 @@ Ces deux cas d'usage sont gérés:
 
 
 **Version incluse :** 2.0~ynh3
+
 ## Documentations et ressources
 
 * Site officiel de l’app : <https://en.wikipedia.org/wiki/Reverse_proxy>

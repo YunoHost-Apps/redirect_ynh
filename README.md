@@ -24,6 +24,7 @@ There two typical use cases are covered:
 
 
 **Shipped version:** 2.0~ynh3
+
 ## Documentation and resources
 
 * Official app website: <https://en.wikipedia.org/wiki/Reverse_proxy>
