@@ -48,6 +48,12 @@ ram.runtime = "50M"
     type = "url"
     help = "This may be something like https://some.other.website (for explicit redirect) or http://127.0.0.1:1234 for reverse-proxies."
 
+    [install.ynh_overlay]
+    ask.en = "Enable the YunoHost button overlay"
+    ask.fr = "Active le button superposé YunoHost"
+    type = "boolean"
+    default = true
+
     [install.init_main_permission]
     type = "group"
     default = "visitors"
