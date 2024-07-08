@@ -9,6 +9,8 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
+_set_ynh_overlay
+
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================

@@ -11,6 +11,8 @@ source /usr/share/yunohost/helpers
 
 _validate_redirect_uri
 
+_set_ynh_overlay
+
 #=================================================
 # CONFIGURE NGINX
 #=================================================
