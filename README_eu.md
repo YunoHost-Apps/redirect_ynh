@@ -5,7 +5,7 @@ EZ editatu eskuz.
 
 # Redirect YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/redirect.svg)](https://dash.yunohost.org/appci/app/redirect) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/redirect.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/redirect.maintain.svg)
+[![Integrazio maila](https://dash.yunohost.org/integration/redirect.svg)](https://ci-apps.yunohost.org/ci/apps/redirect/) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/redirect.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/redirect.maintain.svg)
 
 [![Instalatu Redirect YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=redirect)
 

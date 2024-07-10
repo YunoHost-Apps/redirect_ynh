@@ -1,4 +1,4 @@
-Cette application permet d'intégrée une tuile personalisée dans le portail utilisateur de YunoHost.
+Cette application permet d'intégrer une tuile personalisée dans le portail utilisateur de YunoHost.
 
 Ces deux cas d'usage sont gérés:
 - **redirection basique, explicite** : il s'agit de créer une tuile "virtuelle" qui redirige vers une autre URL ou site web externe (HTTP code 302)

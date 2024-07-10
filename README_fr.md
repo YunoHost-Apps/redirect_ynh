@@ -5,7 +5,7 @@ Il NE doit PAS être modifié à la main.
 
 # Redirect pour YunoHost
 
-[![Niveau d’intégration](https://dash.yunohost.org/integration/redirect.svg)](https://dash.yunohost.org/appci/app/redirect) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/redirect.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/redirect.maintain.svg)
+[![Niveau d’intégration](https://dash.yunohost.org/integration/redirect.svg)](https://ci-apps.yunohost.org/ci/apps/redirect/) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/redirect.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/redirect.maintain.svg)
 
 [![Installer Redirect avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=redirect)
 
@@ -16,7 +16,7 @@ Il NE doit PAS être modifié à la main.
 
 ## Vue d’ensemble
 
-Cette application permet d'intégrée une tuile personalisée dans le portail utilisateur de YunoHost.
+Cette application permet d'intégrer une tuile personalisée dans le portail utilisateur de YunoHost.
 
 Ces deux cas d'usage sont gérés:
 - **redirection basique, explicite** : il s'agit de créer une tuile "virtuelle" qui redirige vers une autre URL ou site web externe (HTTP code 302)
