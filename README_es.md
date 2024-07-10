@@ -5,7 +5,7 @@ No se debe editar a mano.
 
 # Redirect para Yunohost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/redirect.svg)](https://dash.yunohost.org/appci/app/redirect) ![Estado funcional](https://ci-apps.yunohost.org/ci/badges/redirect.status.svg) ![Estado En Mantención](https://ci-apps.yunohost.org/ci/badges/redirect.maintain.svg)
+[![Nivel de integración](https://dash.yunohost.org/integration/redirect.svg)](https://ci-apps.yunohost.org/ci/apps/redirect/) ![Estado funcional](https://ci-apps.yunohost.org/ci/badges/redirect.status.svg) ![Estado En Mantención](https://ci-apps.yunohost.org/ci/badges/redirect.maintain.svg)
 
 [![Instalar Redirect con Yunhost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=redirect)
 
