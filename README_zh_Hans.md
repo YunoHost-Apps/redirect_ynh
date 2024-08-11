@@ -23,7 +23,7 @@ There two typical use cases are covered:
 - **reverse-proxy** : create an app tile to expose an app listening on a specific port, typically something that you manually installed (with or without Docker) locally or on another machine.
 
 
-**分发版本：** 2.0~ynh3
+**分发版本：** 2.0~ynh4
 ## 文档与资源
 
 - 官方应用网站： <https://en.wikipedia.org/wiki/Reverse_proxy>
