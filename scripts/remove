@@ -1,11 +1,5 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -13,10 +7,10 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 # Remove the dedicated NGINX config
-ynh_remove_nginx_config
+ynh_config_remove_nginx
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Removal of $app completed" --last
+ynh_script_progression "Removal of $app completed"

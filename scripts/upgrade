@@ -12,20 +12,20 @@ if [[ "${redirect_type:-}" == *"proxy"* ]]; then
 else
     redirect_type="redirect"
 fi
-ynh_app_setting_set --app=$app --key='redirect_type' --value=$redirect_type
+ynh_app_setting_set --key='redirect_type' --value=$redirect_type
 
 if [[ -z "${target:-}" ]] && [[ -n "${redirect_path:-}" ]]; then
     target="$redirect_path"
-    ynh_app_setting_delete --app=$app --key=redirect_path
-    ynh_app_setting_set --app=$app --key=target --value="$target"
+    ynh_app_setting_delete --key=redirect_path
+    ynh_app_setting_set --key=target --value="$target"
 fi
 
 #=================================================
 # CONFIGURE NGINX
 #=================================================
-ynh_script_progression --message="Configuring NGINX web server..." --weight=1
+ynh_script_progression "Configuring NGINX web server..."
 
 mv ../conf/{nginx-$redirect_type.conf,nginx.conf}
-ynh_add_nginx_config
+ynh_config_add_nginx
 
-ynh_script_progression --message="Upgrade of $app completed" --last
+ynh_script_progression "Upgrade of $app completed"
