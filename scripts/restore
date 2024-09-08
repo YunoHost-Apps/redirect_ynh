@@ -3,13 +3,13 @@
 source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
-ynh_restore_file --origin_path="/etc/nginx/conf.d/${domain}.d/${app}.conf"
+ynh_restore "/etc/nginx/conf.d/${domain}.d/${app}.conf"
 
-ynh_script_progression --message="Reloading NGINX web server..." --weight=1
-ynh_systemd_action --service_name=nginx --action=reload
+ynh_script_progression "Reloading NGINX web server..."
+ynh_systemctl --service=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Restoration completed for $app" --last
+ynh_script_progression "Restoration completed for $app"
