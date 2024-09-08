@@ -6,7 +6,6 @@ source /usr/share/yunohost/helpers
 # BACKUP THE NGINX CONFIGURATION
 #=================================================
 
-# Copy the conf files
 ynh_backup "/etc/nginx/conf.d/${domain}.d/${app}.conf"
 
 #=================================================

@@ -6,7 +6,6 @@ source /usr/share/yunohost/helpers
 # REMOVE NGINX CONFIGURATION
 #=================================================
 
-# Remove the dedicated NGINX config
 ynh_config_remove_nginx
 
 #=================================================
