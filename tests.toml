@@ -5,7 +5,7 @@ test_format = 1.0
 [default]
 
     args.redirect_type = "redirect"
-    args.target = "https://127.0.0.1"
+    args.target = "https://yunohost.org"
 
     # Turns out 302 redirects cant be made private because they are interpreted before going through the sso ...
     exclude = ["install.private"]
@@ -15,7 +15,7 @@ test_format = 1.0
     args.domain = "domain.tld"
     args.path = "/"
     args.redirect_type = "visible_302"
-    args.redirect_path = "https://127.0.0.1"
+    args.redirect_path = "https://yunohost.org"
     args.is_public = true
 
 [reverseproxy]
