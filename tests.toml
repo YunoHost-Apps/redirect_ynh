@@ -5,17 +5,18 @@ test_format = 1.0
 [default]
 
     args.redirect_type = "redirect"
-    args.target = "https://127.0.0.1"
+    args.target = "https://example.org"
 
     # Turns out 302 redirects cant be made private because they are interpreted before going through the sso ...
-    exclude = ["install.private"]
+    # Also skipping 'subdir' test, but mainly because example.org/path doesn't exists (we could also switch to a different target or subpath...)
+    exclude = ["install.private", "install.subdir"]
 
     [default.test_upgrade_from.09cf1c6b]
     name = "v1 era"
     args.domain = "domain.tld"
     args.path = "/"
     args.redirect_type = "visible_302"
-    args.redirect_path = "https://127.0.0.1"
+    args.redirect_path = "https://example.org"
     args.is_public = true
 
 [reverseproxy]
