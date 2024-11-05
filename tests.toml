@@ -3,6 +3,13 @@
 test_format = 1.0
 
 [default]
+    # subdir install tests works because we added specific config to yunohost.org's nginx config:
+    # location = /path {
+    #     return 200 "This is /path for redirect_ynh CI purposes!";
+    # }
+    # location = /path__2 {
+    #     return 200 "This is /path__2 for redirect_ynh CI purposes!";
+    # }
 
     args.redirect_type = "redirect"
     args.target = "https://yunohost.org"
