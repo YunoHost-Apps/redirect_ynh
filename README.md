@@ -31,7 +31,6 @@ sudo yunohost app install https://github.com/YunoHost-Apps/redirect_ynh/tree/tes
 
 # upgrade an existing install:
 sudo yunohost app upgrade redirect -u https://github.com/YunoHost-Apps/redirect_ynh/tree/testing
->>>>>>> origin/testing
 ```
 
 ### 📚 App packaging documentation
