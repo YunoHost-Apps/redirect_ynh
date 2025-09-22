@@ -3,16 +3,16 @@
 test_format = 1.0
 
 [default]
-    # subdir install tests works because we added specific config to yunohost.org's nginx config:
-    # location = /path {
-    #     return 200 "This is /path for redirect_ynh CI purposes!";
-    # }
-    # location = /path__2 {
-    #     return 200 "This is /path__2 for redirect_ynh CI purposes!";
-    # }
-
     args.redirect_type = "redirect"
-    args.target = "https://yunohost.org"
+    args.target = "https://target.domain.tld"
+
+    preinstall = """
+      yunohost domain add target.domain.tld
+      yunohost app install https://github.com/YunoHost-Apps/helloworld_ynh -a "domain=target.domain.tld&path=/&init_main_permission=visitors" --force
+      # Makes any path serve the index.html page:
+      sed -i 's,try_files,try_files index.html,' /etc/nginx/conf.d/target.domain.tld.d/helloworld.conf
+      systemctl reload nginx
+"""
 
     # Turns out 302 redirects cant be made private because they are interpreted before going through the sso ...
     exclude = ["install.private"]
@@ -22,8 +22,12 @@ test_format = 1.0
     args.domain = "domain.tld"
     args.path = "/"
     args.redirect_type = "visible_302"
-    args.redirect_path = "https://yunohost.org"
+    args.redirect_path = "https://target.domain.tld"
     args.is_public = true
+
+    [default.curl_tests]
+    home.path = "/"
+    home.auto_test_assets = false
 
 [reverseproxy]
 
