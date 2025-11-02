@@ -6,6 +6,17 @@ name.fr = "Panneau de configuration"
 services = ["nginx"]
 
 
+[main.proxy]
+name.fr = "Redirection vers"
+name.en = "Redirect to"
+
+[main.proxy.proxy_pass]
+ask.fr = "adresse proxy_pass"
+ask.en = "proxy_pass to"
+type = "url"
+bind = "null"
+optional = false
+
 [main.limit_size]
 name.en = "Upload limit size"
 name.fr = "Téléchargement de fichiers"
