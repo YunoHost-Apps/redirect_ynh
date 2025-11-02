@@ -37,5 +37,6 @@ name.fr = "Intégration"
 ask.en = "Allow embedding from (URLs separated by spaces)"
 ask.fr = "Liste des adresses web autorisées à intégrer cette application séparées par un espace"
 type = "string"
-bind = "null"visible = "redirect_type === reverseproxy"
+bind = "null"
+visible = "redirect_type === reverseproxy"
 
