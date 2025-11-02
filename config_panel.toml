@@ -7,8 +7,8 @@ services = ["nginx"]
 
 
 [main.proxy]
-name.fr = "Redirection vers"
-name.en = "Redirect to"
+name.fr = "Redirection"
+name.en = "Redirect"
 
 [main.proxy.proxy_pass]
 ask.fr = "adresse proxy_pass"
@@ -18,12 +18,12 @@ bind = "null"
 optional = false
 
 [main.limit_size]
-name.en = "Upload limit size"
-name.fr = "Téléchargement de fichiers"
+name.en = "Upload size limit"
+name.fr = "Taille limite pour le téléchargement"
 
 [main.limit_size.upload_max_size]
-ask.fr = "Taille limite Nginx pour le téléchargement des fichiers en Mo"
-ask.en = "Nginx limit size file upload (Mb)"
+ask.fr = "Taille limite pour le téléchargement des fichiers en Mo"
+ask.en = "File upload size limit (Mb)"
 type = "number"
 bind = "null"
 
@@ -34,4 +34,5 @@ name.fr = "Intégration"
 ask.en = "Allow embedding from (URLs separated by spaces)"
 ask.fr = "Liste des adresses web autorisées à intégrer cette application séparées par un espace"
 type = "string"
+bind = "null"
 bind = "null"
