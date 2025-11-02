@@ -16,16 +16,19 @@ ask.en = "proxy_pass to"
 type = "url"
 bind = "null"
 optional = false
+visible = "redirect_type === reverseproxy"
 
 [main.limit_size]
 name.en = "Upload size limit"
 name.fr = "Taille limite pour le téléchargement"
+visible = "redirect_type === reverseproxy"
 
 [main.limit_size.upload_max_size]
 ask.fr = "Taille limite pour le téléchargement des fichiers en Mo"
 ask.en = "File upload size limit (Mb)"
 type = "number"
 bind = "null"
+visible = "redirect_type === reverseproxy"
 
 [main.integration]
 name.en = "Embedding"
@@ -34,4 +37,5 @@ name.fr = "Intégration"
 ask.en = "Allow embedding from (URLs separated by spaces)"
 ask.fr = "Liste des adresses web autorisées à intégrer cette application séparées par un espace"
 type = "string"
-bind = "null"
+bind = "null"visible = "redirect_type === reverseproxy"
+
