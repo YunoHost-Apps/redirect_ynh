@@ -9,6 +9,7 @@ ynh_app_setting_set --key=allowed_urls --value=""
 
 
 _validate_redirect_uri
+_display_config_panel
 
 #=================================================
 # CONFIGURE NGINX
