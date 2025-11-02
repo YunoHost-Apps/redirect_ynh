@@ -16,7 +16,7 @@ _validate_redirect_uri() {
 }
 _display_config_panel() {
 
-   if [ "$redirect_type" = "reverseproxy" ]; then
+   if [ "$redirect_type" = "redirect" ]; then
      rm -f "$app_dir/config_panel.toml"
      rm -f "$app_dir/scripts/config"
    fi
