@@ -3,7 +3,6 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
-ynh_app_setting_set --key=upload_max_size --value=1
 ynh_app_setting_set --key=allowed_urls --value=""
 
 
