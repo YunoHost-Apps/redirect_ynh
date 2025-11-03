@@ -17,16 +17,6 @@ type = "url"
 bind = "null"
 optional = false
 
-[main.limit_size]
-name.en = "Upload size limit"
-name.fr = "Taille limite pour le téléchargement"
-
-[main.limit_size.upload_max_size]
-ask.fr = "Taille limite pour le téléchargement des fichiers en Mo"
-ask.en = "File upload size limit (Mb)"
-type = "number"
-bind = "null"
-
 [main.integration]
 name.en = "Embedding"
 name.fr = "Intégration"
