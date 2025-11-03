@@ -1,12 +1,23 @@
 #!/bin/bash
 source /usr/share/yunohost/helpers
 
+get__upload_max_size() {
+ynh_app_setting_get --key=upload_max_size  
+}
+
 get__proxy_pass() {
 ynh_app_setting_get --key=target
 }
 
 get__allowed_urls() {
 ynh_app_setting_get --key=allowed_urls
+}
+
+set__upload_max_size() {
+    ynh_replace --match='client_max_body_size [^"]*' --replace="client_max_body_size  ${upload_max_size}M  ;" --file="/etc/nginx/conf.d/$domain.d/$app.conf"
+    ynh_store_file_checksum "/etc/nginx/conf.d/$domain.d/$app.conf"
+    ynh_app_setting_set --key=upload_max_size --value="$upload_max_size"
+    ynh_print_info "The nginx config has been edited"
 }
 
 set__proxy_pass() {
