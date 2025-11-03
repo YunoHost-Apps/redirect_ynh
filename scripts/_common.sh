@@ -17,7 +17,7 @@ _validate_redirect_uri() {
 _display_config_panel() {
 
    if [ "$redirect_type" = "redirect" ]; then
-     rm "/etc/yunohost/apps/$app/config_panel.toml"
-     rm "/etc/yunohost/apps/$app/scripts/config"
+     ynh_safe_rm "/etc/yunohost/apps/$app/config_panel.toml"
+     ynh_safe_rm "/etc/yunohost/apps/$app/scripts/config"
    fi
 }
