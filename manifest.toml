@@ -47,7 +47,7 @@ ram.runtime = "50M"
     ask.en = "Target"
     ask.fr = "Cible"
     type = "url"
-    help = "This may be something like https://some.other.website (for explicit redirect) or http://127.0.0.1:1234 for reverse-proxies."
+    help = "This may be something like https://some.other.website (for explicit redirect) or http://127.0.0.1:1234 (do not use localhost but 127.0.0.1 instead) for reverse-proxies."
 
     [install.init_main_permission]
     type = "group"
