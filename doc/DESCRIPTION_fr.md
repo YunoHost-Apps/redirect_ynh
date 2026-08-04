@@ -3,3 +3,4 @@ Cette application permet d'intégrer une tuile personalisée dans le portail uti
 Ces deux cas d'usage sont gérés:
 - **redirection basique, explicite** : il s'agit de créer une tuile "virtuelle" qui redirige vers une autre URL ou site web externe (HTTP code 302)
 - **reverse-proxy** : créer une tuile pour une application locale qui écoute sur un port donné, typiquement quelque chose que vous avez installé manuellement (avec ou sans Docker), sur cette machine ou sur une autre machine.
+- **passthrough** : cette redirection travaillant au niveau http permet de rediriger les requettes sans terminer le lien ssl. Cela permet une connexions client-server interne chiffrée sans perte de chiffrement au niveau du proxy.

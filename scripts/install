@@ -3,7 +3,7 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
-_validate_redirect_uri
+#_validate_redirect_uri
 
 #=================================================
 # CONFIGURE NGINX
@@ -12,6 +12,18 @@ ynh_script_progression "Configuring NGINX web server..."
 
 mv ../conf/{"nginx-$redirect_type.conf",nginx.conf}
 ynh_config_add_nginx
+
+if [[ "${redirect_type:-}" == "proxyredirect" ]]; then
+  ynh_config_add --template="upstream.conf.inc" --destination="/etc/nginx/conf.d/${domain}.d/upstream.conf.inc"
+  cp -R "../conf/hook_conf_regen" "/usr/share/yunohost/hooks/conf_regen/98-nginx_$app"
+  yunohost tools regen-conf nginx
+fi
+if [[ "${redirect_type:-}" == "passthrough" ]]; then
+  ynh_config_add --template="upstream.conf.inc" --destination="/etc/nginx/conf.d/${domain}.d/upstream.conf.inc"
+  cp -R "../conf/hook_conf_regen" "/usr/share/yunohost/hooks/conf_regen/98-nginx_$app"
+  yunohost tools regen-conf nginx
+fi
+
 
 #=================================================
 # END OF SCRIPT

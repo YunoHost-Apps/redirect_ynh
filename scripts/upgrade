@@ -6,19 +6,22 @@ source /usr/share/yunohost/helpers
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-
+ynh_script_progression "Ensure downward compatibility..."
 if [[ "${redirect_type:-}" == *"proxy"* ]]; then
     redirect_type="reverseproxy"
-else
-    redirect_type="redirect"
 fi
-ynh_app_setting_set --key='redirect_type' --value=$redirect_type
+ynh_app_setting_set --key="redirect_type" --value=$redirect_type
 
-if [[ -z "${target:-}" ]] && [[ -n "${redirect_path:-}" ]]; then
-    target="$redirect_path"
-    ynh_app_setting_delete --key=redirect_path
-    ynh_app_setting_set --key=target --value="$target"
+# migration 1 (separate target in server and protocol as for upstream support servers are located in external file) 
+if [[ -z "${target_servers:-}" ]] && [[ -n "${target:-}" ]]; then
+    ynh_script_progression "Migrating data to new redirect version..."
+    target_protocol=$(echo $target | grep -Eo '([a-z]*)://'| grep -Eo '([a-z]*)')
+    target_servers=$(echo $target | grep -Eo '(([0-9]{1,3}\.){3}[0-9]{1,3}(:[0-9]{0,5})?)|(([a-z0-9]*\.){1,5}[a-z]*(:[0-9]{0,5})?)')    
+    ynh_app_setting_delete --key="target"
 fi
+ynh_app_setting_set --key="target_servers" --value="${target_servers}"
+ynh_app_setting_set --key="target_protocol" --value="${target_protocol}"
+
 
 #=================================================
 # CONFIGURE NGINX
@@ -27,5 +30,20 @@ ynh_script_progression "Configuring NGINX web server..."
 
 mv ../conf/{nginx-$redirect_type.conf,nginx.conf}
 ynh_config_add_nginx
+
+#make proxy load balancing working with upstrem config. 
+if [[ "${redirect_type:-}" == "reverseproxy" ]]; then
+    ynh_safe_rm "/etc/nginx/conf.d/${domain}.d/upstream.conf.inc"
+    ynh_config_add --template="upstream.conf.inc" --destination="/etc/nginx/conf.d/${domain}.d/upstream.conf.inc"
+    cp -R "../conf/hook_conf_regen" "/usr/share/yunohost/hooks/conf_regen/98-nginx_$app"
+    yunohost tools regen-conf nginx
+fi
+#make proxy load balancing working with upstrem config. 
+if [[ "${redirect_type:-}" == "passthrough" ]]; then
+    ynh_safe_rm "/etc/nginx/conf.d/${domain}.d/upstream.conf.inc"
+    ynh_config_add --template="upstream.conf.inc" --destination="/etc/nginx/conf.d/${domain}.d/upstream.conf.inc"
+    cp -R "../conf/hook_conf_regen" "/usr/share/yunohost/hooks/conf_regen/98-nginx_$app"
+    yunohost tools regen-conf nginx
+fi
 
 ynh_script_progression "Upgrade of $app completed"

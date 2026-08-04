@@ -11,6 +11,6 @@ _validate_redirect_uri() {
     # Avoid uncrypted remote destination with reverse proxy mode
     # Indeed the SSO send the password in all requests in HTTP headers
     if [[ "$redirect_type" = "reverseproxy" ]] && [[ ! $target =~ $URL_REGEX_SECURE ]]; then
-        ynh_print_warn "Reverseproxying using cleartext HTTP to a possibly external machine ($target) is insecure ... please be super careful about this."
+        ynh_print_warn "Reverseproxying using cleartext HTTP to a possibly external machine ($target) is insecure ... please be super careful about this. Better use passthrough"
     fi
 }

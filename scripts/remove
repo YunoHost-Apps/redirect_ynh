@@ -7,7 +7,8 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 ynh_config_remove_nginx
-
+# do not remove if domain not removed
+# ynh_safe_rm "/etc/nginx/conf.d/${domain}.d/upstream.conf.inc"
 #=================================================
 # END OF SCRIPT
 #=================================================

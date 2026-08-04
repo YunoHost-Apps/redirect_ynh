@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# This script is expeced to be called xx-nginx_$app
+app=$(basename $0 | cut -d_ -f2-)
+domain=$(yunohost app setting $app domain)
+data_dir=$(yunohost app setting $app data_dir)
+port_http=$(yunohost app setting $app port_http)
+redirect_type=$(yunohost app setting $app redirect_type)
+action=$1
+pending_dir=$4
+nginx_domain_conf="${pending_dir}/../nginx/etc/nginx/conf.d/$domain.conf"
+
+[[ "$action" == "pre" ]] || exit 0
+[[ -e "$nginx_domain_conf" ]] || exit 0
+
+
+if [[ "${redirect_type:-}" == "reverseproxy" ]]; then
+    # Add *.$domain to the HTTP server
+    # such that we can obtain the SSL cert via acme-challenge
+    sed -zE "s/(listen \S*80;\n\s*server_name) [^\n]*;/\1 $domain *.$domain;/g" -i "$nginx_domain_conf"
+    sed -zE "s/(listen \S*443 ssl http2;\n\s*server_name) [^\n]*;/\1 $domain *.$domain;/g" -i "$nginx_domain_conf"
+    cat << EOF >> $nginx_domain_conf
+    # support for upstream server list
+    upstream $domain {
+        include /etc/nginx/conf.d/$domain.d/upstream.conf.inc;
+    }
+    EOF
+}
+
+if [[ "${redirect_type:-}" == "passthrough" ]]; then
+    sed -zE "s/listen \S*443 ssl http2;;/listen \S*443;/g" -i "$nginx_domain_conf"
+
+    cat << EOF >> $nginx_domain_conf
+    # support for upstream server list
+    upstream $domain {
+        include /etc/nginx/conf.d/$domain.d/upstream.conf.inc;
+    }
+    EOF
+}
+
+

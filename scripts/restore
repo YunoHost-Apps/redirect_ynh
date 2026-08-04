@@ -3,8 +3,10 @@
 source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
-ynh_restore "/etc/nginx/conf.d/${domain}.d/${app}.conf"
-
+if [[ "${redirect_type:-}" == "reverseproxy" || "${redirect_type:-}" == "passthrough" ]]; then
+  ynh_restore "/etc/nginx/conf.d/${domain}.d/upstream.conf.inc"
+  ynh_restore "/etc/nginx/conf.d/${domain}.d/${app}.conf"
+fi
 ynh_script_progression "Reloading NGINX web server..."
 ynh_systemctl --service=nginx --action=reload
 

@@ -1,0 +1,45 @@
+#!/bin/bash
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+ynh_abort_if_errors
+
+#=================================================
+# REDIRECT GET/SET
+#=================================================
+get__target_protocol() {
+    # get protocol from nginx.conf in all case
+    echo $(cat "/etc/nginx/conf.d/${domain}.d/${app}.conf" | grep -Eo '(proxy_pass|302)\s*([a-z]*)'| grep -Eo '([a-z]*)$')
+}
+
+set__target_protocol() {
+    # set target protocol in nginx.conf in all case but match/replace differ if redirect or proxy
+    if [[ $redirect_type == "redirect" ]];then
+        $(sed -i -E "s/302\s*([a-z]*):/ 302 $target_protocol:/g" "/etc/nginx/conf.d/${domain}.d/${app}.conf")
+    else
+        $(sed -i -E "s/proxy_pass\s*([a-z]*):/ proxy_pass $target_protocol:/g" "/etc/nginx/conf.d/${domain}.d/${app}.conf")
+    fi
+}
+
+get__target_servers() {
+    # get target server if redirect in nginx.conf else if proxy servers in upstream.conf.inc
+    if [[ $redirect_type == "redirect" ]];then
+        echo $(cat "/etc/nginx/conf.d/${domain}.d/${app}.conf" | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}(:[0-9]{0,5})?|(([a-z0-9]*\.){1,5}[a-z]*(:[0-9]{0,5})?)')
+    else
+        echo "$(cat /etc/nginx/conf.d/${domain}.d/upstream.conf.inc)"
+    fi
+}
+
+set__target_servers() {
+    # set target server in nginx.conf if redirect type or in upstream.conf.in if proxy type
+    if [[ ${redirect_type} == "redirect" ]];then
+        $(sed -i -E "s/(([0-9]{1,3}\.){3}[0-9]{1,3}(:[0-9]{0,5})?|(([a-z0-9]*\.){1,5}[a-z]*(:[0-9]{0,5})?))/$target_servers/g" "/etc/nginx/conf.d/${domain}.d/${app}.conf")
+    else
+        echo "${target_servers}" > "/etc/nginx/conf.d/${domain}.d/upstream.conf.inc"
+    fi
+}
+
+#=================================================
+
+ynh_app_config_run "$1"

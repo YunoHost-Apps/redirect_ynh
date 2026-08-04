@@ -7,7 +7,7 @@ name = "Redirect"
 description.en = "Create a redirection or a proxy to another path"
 description.fr = "Créer une redirection ou un proxy vers un autre emplacement"
 
-version = "2.1~ynh1"
+version = "2.2~ynh1"
 
 maintainers = []
 
@@ -41,13 +41,23 @@ ram.runtime = "50M"
     type = "select"
     choices.redirect = "Explicit redirection (HTTP 302). Redirect people to a different page."
     choices.reverseproxy = "Reverse-proxy (nginx proxy_pass). Expose an app, typically something that you manually installed (with or without Docker) locally or an another machine."
+    choices.passthrough = "Reverse-proxy passthrough (nginx proxy_pass which not manage ssl).the remote server manage the ssl to have end to end encryption"
     default = "redirect"
 
-    [install.target]
-    ask.en = "Target"
-    ask.fr = "Cible"
-    type = "url"
-    help = "This may be something like https://some.other.website (for explicit redirect) or http://127.0.0.1:1234 for reverse-proxies."
+    [install.target_protocol]
+    ask.en = "Are server(s) have http or https access ?"
+    ask.fr = "Les serveur(s) est(sont) il(s) accessible(s) en https ou en http ?"
+    type = "select"
+    choices = ["http", "https"]
+    default = "http"    
+    
+    [install.target_servers]
+    ask.en = "Target server(s)"
+    ask.fr = "Serveur(s) destination"
+    default = "server 127.0.0.1;"
+    help.en = "For a simpleredirect, only one server like (host.domain.tld(:port) or ip(:port)). \nFor a reverse proxy or passthrough, serveur should be specified as 'server host:port;' inline or one per line. Read the manual for more options : https://nginx.org/en/docs/http/ngx_http_upstream_module.html"
+    help.fr = "Pour une redirection simple , un seul serveur (host.domain.tld(:port) or ip(:port)). \nPour un proxy inversé ou transparent, les serveurs devont être spécifiés sous la forme 'server host:port;' en ligne ou un par ligne.. Lire la documentation pour plus d'option : https://nginx.org/en/docs/http/ngx_http_upstream_module.html"
+    type = "text"
 
     [install.init_main_permission]
     type = "group"

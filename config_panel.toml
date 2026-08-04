@@ -1,0 +1,37 @@
+version = "1.0"
+
+[main]
+
+####################
+#### ACCOUNTS CONFIG
+####################
+name = "Global configuration"
+    [main.target]
+
+    name = "Target config"
+
+    help = "Config destination servers"
+
+        [main.target.redirect_type]
+        ask.en = "Redirect type"
+        ask.fr = "Type de redirection"
+         #bind = "null"
+        type = "string"
+        readonly = true
+
+        [main.target.target_protocol]
+        ask.en = "Are servers have http or https access ?"
+        ask.fr = "Les serveurs sont ils accessibles en https ou en http ?"
+        bind = "null"
+        type = "select"
+        choices = ["http", "https"]
+        default = "http"
+
+        [main.target.target_servers]
+        ask.en = "Edit the target servers"
+        ask.fr = "Editez les serveurs destinations"
+        bind = "null"
+        default = "server 127.0.0.1;"
+        help.en = "For a simpleredirect, only one server like (host.domain.tld(:port) or ip(:port)). \nFor a reverse proxy, serveur specified as 'server host:port;' inline or one per line. Read the manual for more options : https://nginx.org/en/docs/http/ngx_http_upstream_module.html"
+        help.fr = "Pour une redirection simple , un seul serveur (host.domain.tld(:port) or ip(:port)). \nPour un proxy inversé, les serveurs sont sous la forme 'server host:port;' en ligne ou un par ligne.. Lire la documentation pour plus d'option : https://nginx.org/en/docs/http/ngx_http_upstream_module.html"
+        type = "text"

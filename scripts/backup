@@ -5,8 +5,10 @@ source /usr/share/yunohost/helpers
 #=================================================
 # BACKUP THE NGINX CONFIGURATION
 #=================================================
-
-ynh_backup "/etc/nginx/conf.d/${domain}.d/${app}.conf"
+if [[ "${redirect_type:-}" == "reverseproxy" || "${redirect_type:-}" == "passthrough" ]]; then
+  ynh_backup "/etc/nginx/conf.d/${domain}.d/upstream.conf.inc"
+  ynh_backup "/etc/nginx/conf.d/${domain}.d/${app}.conf"
+fi
 
 #=================================================
 # END OF SCRIPT
