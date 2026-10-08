@@ -1,0 +1,60 @@
+version = "1.0"
+
+[main]
+name.en = "Configuration panel"
+name.fr = "Panneau de configuration"
+services = ["nginx"]
+
+[main.mode]
+name = "Mode"
+
+[main.mode.redirect_type]
+ask.en = "Redirect type :"
+ask.fr = "Type de redirection :"
+type = "select"
+choices.redirect = "Explicit redirection (HTTP 302). Redirect people to a different page."
+choices.redirect-no_path = "Explicit redirection (HTTP 302). Redirect people to a different page. Do not keep path"
+choices.reverseproxy = "Reverse-proxy (nginx proxy_pass). Expose an app, typically something that you manually installed (with or without Docker) locally or an another machine."
+
+[main.mode.target]
+ask.en = "target"
+ask.fr = "cible"
+type = "url"
+help = "This may be something like https://some.other.website (for explicit redirect) or http://127.0.0.1:1234 for reverse-proxies."
+
+[main.limit_size]
+name.en = "Upload size limit"
+name.fr = "Taille limite pour le téléchargement"
+visible = "redirect_type == 'reverseproxy'"
+
+[main.limit_size.upload_max_size]
+ask.fr = "Taille limite pour le téléchargement des fichiers en Mo"
+ask.en = "File upload size limit (Mb)"
+type = "number"
+bind = "null"
+visible = "redirect_type == 'reverseproxy'"
+
+[main.integration]
+name.en = "Embedding"
+visible = "redirect_type == 'reverseproxy'"
+
+[main.integration.allowed_urls]
+ask.en = "Allow embedding from (URLs separated by spaces)"
+ask.fr = "Liste des adresses web autorisées à intégrer cette application séparées par un espace"
+type = "string"
+bind = "null"
+visible = "redirect_type == 'reverseproxy'"
+
+[main.auth_basic]
+name.en = "Reverse proxy to an app which reuses the auth basic header"
+name.fr = "Reverse proxy vers une application qui réutilise l’en-tête d’authentification Basic"
+visible = "redirect_type == 'reverseproxy'"
+
+[main.auth_basic.pabas]
+ask.en = "Disable protect_against_basic_auth_spoofing"
+ask.fr = "Désactiver protect_against_basic_auth_spoofing"
+help = "[Documentation](https://doc.yunohost.org/en/dev/packaging/advanced/sso_ldap_integration#specific-case)"
+type = "boolean"
+bind = "null"
+visible = "redirect_type == 'reverseproxy'"
+

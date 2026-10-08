@@ -1,0 +1,65 @@
+#!/bin/bash
+source /usr/share/yunohost/helpers
+
+get__upload_max_size() {
+ynh_app_setting_get --key=upload_max_size  
+}
+
+get__proxy_pass() {
+ynh_app_setting_get --key=target
+}
+
+get__allowed_urls() {
+ynh_app_setting_get --key=allowed_urls
+}
+
+get__pabas() {
+ynh_app_setting_get --key=pabas
+}
+
+set__upload_max_size() {
+    ynh_replace --match='client_max_body_size [^"]*' --replace="client_max_body_size  ${upload_max_size}M  ;" --file="/etc/nginx/conf.d/$domain.d/$app.conf"
+    ynh_store_file_checksum "/etc/nginx/conf.d/$domain.d/$app.conf"
+    ynh_app_setting_set --key=upload_max_size --value="$upload_max_size"
+    ynh_print_info "The nginx config has been edited"
+}
+
+set__proxy_pass() {
+    ynh_replace --match='proxy_pass[^"]*' --replace="proxy_pass        $proxy_pass ;" --file="/etc/nginx/conf.d/$domain.d/$app.conf"
+    ynh_store_file_checksum "/etc/nginx/conf.d/$domain.d/$app.conf"
+    ynh_app_setting_set --key=target --value="$proxy_pass"
+    ynh_print_info "The nginx config has been edited"
+}
+
+set__allowed_urls() {
+    ynh_replace --match='frame-ancestors [^"]*' --replace="frame-ancestors 'self' $allowed_urls" --file="/etc/nginx/conf.d/$domain.d/$app.conf"
+    ynh_store_file_checksum "/etc/nginx/conf.d/$domain.d/$app.conf"
+    ynh_app_setting_set --key=allowed_urls --value="$allowed_urls"
+    ynh_print_info "The nginx config has been edited"
+}
+
+set__pabas() {
+    if [ "$pabas" -eq 0 ]; then
+    ynh_app_setting_delete --key=protect_against_basic_auth_spoofing 
+    elif [ "$pabas" -eq 1 ]; then
+    ynh_app_setting_set --key=protect_against_basic_auth_spoofing  --value=false
+    fi
+    ynh_app_setting_set --key=pabas --value="$pabas" 
+    yunohost app ssowatconf
+}
+
+#=================================================
+# OVERWRITING APPLY STEP
+#=================================================
+ynh_app_config_apply() {
+
+
+    _ynh_app_config_apply
+
+    ynh_print_info --message="Override NGINX configuration"
+#    ynh_config_remove_nginx
+    cp ../conf/nginx-$redirect_type.conf ../conf/nginx.conf
+    # Create a dedicated NGINX config
+    ynh_config_add_nginx
+}
+ynh_app_config_run $1

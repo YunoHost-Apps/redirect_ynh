@@ -3,15 +3,24 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
+
+ynh_app_setting_set_default --key=upload_max_size --value="1"
+ynh_app_setting_set_default --key=allowed_urls --value=""
+ynh_app_setting_set_default --key=pabas --value="0"
+
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
 
-if [[ "${redirect_type:-}" == *"proxy"* ]]; then
-    redirect_type="reverseproxy"
-else
-    redirect_type="redirect"
+if ynh_app_upgrading_from_version_before 2.1~ynh2; then
+    if [[ "${redirect_type:-}" == *"proxy"* ]]; then
+        redirect_type="reverseproxy"
+    else
+        redirect_type="redirect"
+    fi
+ynh_app_setting_set --key='redirect_type' --value=$redirect_type
 fi
+
 ynh_app_setting_set --key='redirect_type' --value=$redirect_type
 
 if [[ -z "${target:-}" ]] && [[ -n "${redirect_path:-}" ]]; then
@@ -25,7 +34,7 @@ fi
 #=================================================
 ynh_script_progression "Configuring NGINX web server..."
 
-mv ../conf/{nginx-$redirect_type.conf,nginx.conf}
+cp ../conf/{nginx-$redirect_type.conf,nginx.conf}
 ynh_config_add_nginx
 
 ynh_script_progression "Upgrade of $app completed"

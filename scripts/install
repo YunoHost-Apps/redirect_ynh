@@ -3,6 +3,14 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
+upload_max_size="1"
+allowed_urls=""
+pabas="0"
+
+ynh_app_setting_set --key=upload_max_size --value=$upload_max_size
+ynh_app_setting_set --key=allowed_urls --value=$allowed_urls
+ynh_app_setting_set --key=pabas --value="$pabas"
+
 _validate_redirect_uri
 
 #=================================================
